@@ -31,6 +31,18 @@ def error_page(reuqest):
             "m": "Route not fiddled", "i": "true"}))
 
 
+def success(reuqest):
+    return HttpResponseRedirect(_my_reverse(
+        "pyfiddleweb:home", query_kwargs={
+            "m": "Thank you for your generosity"}))
+
+
+def cancel(reuqest):
+    return HttpResponseRedirect(_my_reverse(
+        "pyfiddleweb:home", query_kwargs={
+            "m": "Please donate next time"}))
+
+
 def login(request):
     user = request.user
     if user.is_authenticated():
@@ -103,6 +115,7 @@ def run(request):
         try:
             payload = {}
             fiddle_id = request.POST.get("fiddle_id")
+            version = request.POST.get("version", False)
             if fiddle_id:
                 file_paths = ScriptFiles.objects.filter(script__id=fiddle_id)
                 _get_s3_files(file_paths)
@@ -129,17 +142,18 @@ def run(request):
                 return JsonResponse({"error": "Please fiddle in some code"})
             else:
                 ScriptRuns.objects.create(token=csrftoken, code=code_entered)
-            payload["code"] = request.POST.get("code", "")
+            payload["code"] = code_entered
             payload["commands"] = request.POST.get("commands", "")
             payload["packages"] = request.POST.get("packages", "")
             payload["inputs"] = request.POST.get("inputs", "")
             payload["token"] = csrftoken
-            version = request.POST.get("version", False)
             if version:
                 function = os.getenv("EXECUTE_LAMBDA_36")
             else:
                 function = os.getenv("EXECUTE_LAMBDA")
             client = boto3.client('lambda')
+            print(function)
+            print(json.dumps(payload))
             response = client.invoke(
                 FunctionName=function,
                 InvocationType="RequestResponse",
@@ -157,7 +171,7 @@ def run(request):
         except:
             print(traceback.print_exc())
             return JsonResponse(
-                {"error": "Somthing went wrong"})
+                {"error": "Something went wrong"})
     else:
         return JsonResponse({"error": "Why are you here?"})
 
@@ -243,6 +257,8 @@ def upload(request):
 def share(request):
     if request.method == "POST" and request.user.is_authenticated():
         return JsonResponse(_save_new_fiddle(request, save=False))
+    if not request.user.is_authenticated():
+        return JsonResponse({"message": "Please login to Share a fiddle"})
     else:
         return JsonResponse({"message": "Why are you here?"})
 
@@ -260,7 +276,7 @@ def star(request):
                 script=script,
                 user=request.user
                 )
-        return JsonResponse({"message": "Starred fiddle"})
+        return JsonResponse({"message": "Bookmarked fiddle"})
     if not request.user.is_authenticated():
         return JsonResponse({"message": "Please login to Star a fiddle"})
     else:
@@ -292,7 +308,7 @@ def file_delete(request):
         fiddle_id = request.POST.get("fiddle_id")
         try:
             fil = ScriptFiles.objects.get(
-                script_id=fiddle_id, name=request.POST.get("file_name"))
+                script_id=fiddle_id, id=request.POST.get("file_id"))
         except ScriptFiles.DoesNotExist:
             return JsonResponse({"status": 0})
         else:
@@ -309,9 +325,9 @@ def email_send(request):
             return JsonResponse(
                 {"message": "Please fill in email and message"})
         try:
-            email_addr = request.POST.get("email")
-            subject = request.POST.get("subject_topic")
-            message = request.POST.get("message")
+            email_addr = request.POST.get("email", "")
+            subject = request.POST.get("subject", "")
+            message = request.POST.get("message", "")
             fromaddr = 'webmaster@pyfiddle.io'
             toaddr = 'webmaster@pyfiddle.io'
             msg = MIMEMultipart()
@@ -332,6 +348,8 @@ def email_send(request):
         except:
             print(traceback.print_exc())
             return JsonResponse({"message": "Error Sending Email"})
+    else:
+        return JsonResponse({"message": "Why are you here?"})
 
 
 def privacy(request):

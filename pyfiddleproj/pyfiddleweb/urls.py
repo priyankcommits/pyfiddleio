@@ -2,7 +2,7 @@ from django.conf.urls import url
 
 from .views import logout
 from .views import home, run, upload, fiddle, email_send, privacy
-from .views import save, star, delete, share, file_delete
+from .views import save, star, delete, share, file_delete, success, cancel
 
 urlpatterns = [
     url(r'login/', home, name='login'),
@@ -21,5 +21,7 @@ urlpatterns = [
     url(r'file_delete/', file_delete, name='file_delete'),
     url(r'delete/', delete, name='delete'),
     url(r'email/', email_send, name='email'),
-    url(r'privacy/', privacy, name='privacy')
+    url(r'privacy/', privacy, name='privacy'),
+    url(r'success/', success, name="success"),
+    url(r'cancel/', cancel, name="cancel"),
 ]
