@@ -91,6 +91,7 @@ def _remove_envs():
         'AWS_LAMBDA_FUNCTION_NAME',
         'AWS_LAMBDA_FUNCTION_MEMORY_SIZE',
         'AWS_LAMBDA_FUNCTION_VERSION',
+        'PATH',
     ]
     try:
         for key, value in os.environ.items():

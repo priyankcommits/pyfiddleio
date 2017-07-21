@@ -33,7 +33,6 @@ social_auth_core-1.4.0.dist-info
 social_auth_app_django-1.2.0.dist-info
 social_core
 social_django
-static
 urllib3-1.21.1.dist-info
 urllib3
 zappa_settings.json

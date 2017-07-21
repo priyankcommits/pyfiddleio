@@ -1,0 +1,50 @@
+{% load static %}
+<div class="ui text menu">
+  <div class="item">
+    <a class="brand-logo" href="{% url 'pyfiddleweb:home' %}">
+      <img src="{% static 'images/python-logo.png' %}">
+      <span>Pyfiddle  <span class="version-font"> v 1.0</span></span>
+    </a>
+  </div>
+</div>
+<div class="ui grid divided custom-padding-10 custom-overflow-allowed">
+  <div class="sixteen wide column">
+    <h3 class="ui header">About Pyfiddle</h3>
+    <p>
+    PyFiddle is a free lightweight Python IDE to run and share
+    Python scripts with some nifty features, created with love by pythonista Priyank Pulumati
+    <a target="_blank" href="https://github.com/priyankcommits"><i class="github icon"></i></a>
+    <a target="_blank" href="https://linkedin.com/in/priyankpulumati/"><i class="linkedin icon"></i></a>
+    and <a target="_blank" href="http://beautifulcode.in">Beautiful Code</a>
+    </p>
+  </div>
+  <div class="sixteen wide column">
+    <p style="color: red !important;">
+    Unfortunately, as of now, Pyfiddle is not supported on lower resolution devices, please use a device with a higher resolution.
+    </p>
+  </div>
+  <div class="sixteen wide column">
+    <form id="email_form_mobile" class="ui form" action="." method="POST" enctype="multipart/form-data">
+      <div class="field eight wide">
+        <label>Email</label>
+        <input type="text" name="email" placeholder="Email" required>
+      </div>
+      <div class="field six wide">
+        <label>Subject</label>
+        <div class="field">
+          <select class="ui fluid search dropdown" name="subject" required>
+            <option value="">Select subject</option>
+            <option value="General">General</option>
+            <option value="Bug/Issue">Bug/Issue</option>
+            <option value="Suggestion">Suggestion</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label>Message</label>
+        <textarea></textarea>
+      </div>
+      <button class="ui button" type="submit">Submit</button>
+    </form>
+  </div>
+</div>

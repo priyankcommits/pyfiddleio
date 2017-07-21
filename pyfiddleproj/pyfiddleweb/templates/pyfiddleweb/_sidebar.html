@@ -1,53 +1,162 @@
 {% load static %}
-<ul id="slide-out" class="side-nav fixed">
-  <ul class="collapsible" data-collapsible="accordion">
-    <li data-position="bottom" data-delay="1000" data-tooltip="Saved Fiddle(s)" class="tooltipped">
-      <div class="collapsible-header">
-          <span class="fa fa-chevron-down fa-1x li-icon-save li-header-left "></span>
-          <span class="li-icon-save  padding-left-30-percent">Saved Fiddles</span>
+<div class="side-navbar">
+
+  <form class="ui form">
+    <div class="field fiddle-name">
+      <label>Fiddle Name</label>
+      <div class="ui checkbox private">
+        {{ form.private }}
+        <label for="id_private">Private</label>
       </div>
-      <div class="collapsible-body">
-        <ul class="collection">
-          {% if saved_fiddles %}
-          {% for saved_fiddle in saved_fiddles %}
-          <li data-position="bottom" data-delay="1000" data-tooltip="{{saved_fiddle.script.user}}" class="tooltipped collection-item"><a href="{% url 'pyfiddleweb:fiddle' fiddle_id=saved_fiddle.script.id %}">{{saved_fiddle.script.fiddle_name}}<span class="new badge li-play" data-badge-caption="runs">{{saved_fiddle.script.runs}}</span></a></li>
-          {% endfor %}
-          {% else %}
-          <li class="collection-item">No Saved Fiddles</li>
-          {% endif %}
-        </ul>
+      {{ form.fiddle_name }}
+    </div>
+  </form>
+
+  <div class="python-version">
+    <span>Python version</span>
+    <div class="toggle-container">
+      <label class="v2-7" for="version">2.7</label>
+      <div class="ui toggle checkbox">
+        {{ form.version }}
+        <label id="id_version"></label>
       </div>
-    </li>
-    <li data-position="bottom" data-delay="1000" data-tooltip="Starred Fiddle(s)" class="tooltipped">
-      <div class="collapsible-header">
-          <span class="fa fa-chevron-down fa-1x li-icon-star li-header-left "></span>
-          <span class="li-icon-star  padding-left-30-percent">Starred Fiddles</span>
+      <label class="v3-6" for="version">3.6</label>
+    </div>
+  </div>
+
+  <div class="file-group">
+
+    <div class="ui list sidebar-list-fiddles">
+      <div class="item">
+        <i class="folder icon"></i>
+        <div class="content">
+          <div class="header">{{script.fiddle_name}}</div>
+          <div id="file-list" class="list">
+            <div class="item">
+              <i class="file icon"></i>
+              <div class="content">
+                <div class="header">main.py ( now editing .. )</div>
+              </div>
+            </div>
+            {% for file in files %}
+            <div class="item" id="{{file.id}}">
+              <i class="file icon"></i>
+              <div class="content">
+                <div class="header">{{file.name}}
+                  {% if file.script.user == request.user %}
+                  <span id="{{file.id}}" name="file_to_delete" class="file_to_delete pointer fa fa-minus-circle fa-1x" value="{{file.name}}">
+                  </span>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
       </div>
-      <div class="collapsible-body">
-        <ul class="collection">
-          {% if starred_fiddles %}
-          {% for starred_fiddle in starred_fiddles %}
-          <li data-position="bottom" data-delay="1000" data-tooltip="{{starred_fiddle.script.user}}" class="tooltipped collection-item"><a href="{% url 'pyfiddleweb:fiddle' fiddle_id=starred_fiddle.script.id %}">{{starred_fiddle.script.fiddle_name}}<span class="new badge li-play" data-badge-caption="runs">{{starred_fiddle.script.runs}}</span></a></li>
-          {% endfor %}
-          {% else %}
-          <li class="collection-item">No Starred Fiddles</li>
-          {% endif %}
-        </ul>
+    </div>
+
+    <div>
+      <label for="file" class="ui icon primary button tiny">
+        <i class="file icon"></i>
+        Upload Local File
+      </label>
+      <input form="fiddle_form" name="upload" type="file" id="file" multiple>
+    </div>
+  </div>
+
+  <div class="ui styled fluid accordion">
+    <div id="popular" class="title">
+      <i class="dropdown icon"></i>
+      Community Popular Runs
+    </div>
+    <div class="content sidebar-list-fiddles">
+      <div class="ui middle aligned selection list">
+        {% for most_run in most_runs %}
+        <a href="{% url 'pyfiddleweb:fiddle' fiddle_id=most_run.id %}">
+          <div class="item">
+            <div class="content">
+              {{most_run.fiddle_name}} <div class="ui label pull-right">{{most_run.runs}}</div>
+            </div>
+          </div>
+        </a>
+        {% endfor %}
       </div>
-    </li>
-    <li data-position="bottom" data-delay="1000" data-tooltip="Most Run Fiddles" class="tooltipped">
-      <div class="collapsible-header">
-        <span class="fa fa-chevron-down fa-1x li-icon-play li-header-left"></span>
-        <span class="li-icon-play padding-left-30-percent">Popular Run Fiddles</span>
+    </div>
+
+    <div class="title">
+      <i class="dropdown icon"></i>
+      My Saved
+    </div>
+    <div class="content sidebar-list-fiddles">
+      <div class="ui middle aligned selection list">
+        {% for saved_fiddle in saved_fiddles %}
+        <a href="{% url 'pyfiddleweb:fiddle' fiddle_id=saved_fiddle.script.id %}">
+          <div class="item">
+            <div class="content">
+              {{saved_fiddle.script.fiddle_name}} <div class="ui label pull-right">{{saved_fiddle.script.runs}}</div>
+            </div>
+          </div>
+        </a>
+        {% endfor %}
       </div>
-      <div class="collapsible-body">
-        <ul class="collection">
-          {% for most_run in most_runs %}
-          <li data-position="bottom" data-delay="1000" data-tooltip="{{most_run.user}}" class="tooltipped collection-item"><a href="{% url 'pyfiddleweb:fiddle' fiddle_id=most_run.id %}">{{most_run.fiddle_name}}<span class="new badge li-play" data-badge-caption="runs">{{most_run.runs}}</span></a></li>
-          {% endfor %}
-        </ul>
+    </div>
+
+    <div class="title">
+      <i class="dropdown icon"></i>
+      My Boookmarked
+    </div>
+    <div class="content sidebar-list-fiddles">
+      <div class="ui middle aligned selection list">
+        {% for starred_fiddle in starred_fiddles %}
+        <a href="{% url 'pyfiddleweb:fiddle' fiddle_id=starred_fiddle.script.id %}">
+          <div class="item">
+            <div class="content">
+              {{starred_fiddle.script.fiddle_name}} <div class="ui label pull-right">{{starred_fiddle.script.runs}}</div>
+            </div>
+          </div>
+        </a>
+        {% endfor %}
       </div>
-    </li>
-  </ul>
-</ul>
-<a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a>
+    </div>
+  </div>
+
+  <div class="feedback">
+    <button class="ui grey basic button"><i class="comment outline icon"></i>Feedback</button>
+  </div>
+
+  <div class="ui feedback-form modal">
+    <div class="header">
+      Feedback
+    </div>
+    <div class="content">
+      <form id="email_form" class="ui form" action="." method="POST" enctype="multipart/form-data">
+        <div class="field eight wide">
+          <label>Email</label>
+          <input type="text" name="email" placeholder="Email" required>
+        </div>
+        <div class="field three wide">
+          <label>Subject</label>
+          <div class="field">
+            <select class="ui fluid search dropdown" name="subject" required>
+              <option value="">Select subject</option>
+              <option value="General">General</option>
+              <option value="Bug/Issue">Bug/Issue</option>
+              <option value="Suggestion">Suggestion</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label>Message</label>
+          <textarea></textarea>
+        </div>
+        <button class="ui button" type="submit">Submit</button>
+      </form>
+    </div>
+    <div class="actions">
+      <div class="ui deny primary button">
+        Close
+      </div>
+    </div>
+  </div>
+</div>

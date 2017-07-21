@@ -25,7 +25,7 @@ def execute(event):
     fil_path = "/tmp/"
     fil = open(fil_path+"main.py", "wb")
     data = event["code"]
-    fil.write(data)
+    fil.write(bytes(data.encode("utf-8")))
     fil.close()
     args_string = event["commands"]
     if args_string != "":
@@ -62,11 +62,11 @@ def execute(event):
             stderr=PIPE,
             stdin=PIPE,
             )
-    output, error = p.communicate(input=input_string)
+    output, error = p.communicate(input=bytes(input_string.encode("utf-8")))
     if p.returncode != 0:
-        ret["message"] = base64.b64encode(error)
+        ret["message"] = base64.b64encode(error).decode("utf-8")
     else:
-        ret["message"] = base64.b64encode(output)
+        ret["message"] = base64.b64encode(output).decode("utf-8")
     ret["status"] = 0
     ret["packages"] = package_error_true
     return ret
@@ -91,9 +91,10 @@ def _remove_envs():
         'AWS_LAMBDA_FUNCTION_NAME',
         'AWS_LAMBDA_FUNCTION_MEMORY_SIZE',
         'AWS_LAMBDA_FUNCTION_VERSION',
+        'PATH'
     ]
     try:
-        for key, value in os.environ.items():
+        for key in list(os.environ.keys()):
             if key not in required_envs:
                 del os.environ[key]
     except:

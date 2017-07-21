@@ -20,7 +20,26 @@ class ScriptForm(ModelForm):
             'text': forms.Textarea(
                 attrs={}
             ),
-            'commands': forms.TextInput(attrs={"form": "fiddle_form"}),
-            'packages': forms.TextInput(attrs={"form": "fiddle_form"}),
-            'inputs': forms.TextInput(attrs={"form": "fiddle_form"}),
+            'packages': forms.TextInput(
+                attrs={
+                    "form": "fiddle_form",
+                    "placeholder": "Eg: numpy,requests==2.18.3"
+                    }
+                ),
+            'commands': forms.TextInput(
+                attrs={
+                    "form": "fiddle_form",
+                    "placeholder": "Eg: 1,2,3"
+                    }
+                ),
+            'inputs': forms.TextInput(
+                attrs={
+                    "form": "fiddle_form",
+                    "placeholder": "Eg: hello,world"
+                    }
+                ),
+            'private': forms.CheckboxInput(attrs={"form": "fiddle_form"}),
+            'version': forms.CheckboxInput(attrs={"form": "fiddle_form"}),
+            'fiddle_name': forms.TextInput(
+                attrs={"form": "fiddle_form", "placeholder": "myfiddle"})
         }

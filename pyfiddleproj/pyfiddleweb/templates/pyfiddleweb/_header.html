@@ -1,26 +1,116 @@
 {% load static %}
-<div class="navbar-fixed">
-  <!-- Dropdown Structure -->
-  <ul id="dropdown-header-login-required" class="dropdown-content">
-    <li><a class="github" href="{% url "social:begin" "github" %}"><span class="fa fa-github fa-2x"></span> Github</a></li>
-    <li><a class="google" href="{% url "social:begin" "google-oauth2" %}"><span class="fa fa-google fa-2x"></span> Google</a></li>
-  </ul>
-  <ul id="dropdown-header-logged-in" class="dropdown-content">
-    <li><a class="github" href="{% url 'pyfiddleweb:logout' %}"><span class="fa fa-power-off fa-2x"></span> Logout</a></li>
-  </ul>
-  <nav>
-    <div class="nav-wrapper">
-      <a data-position="bottom" data-delay="1000" data-tooltip="PyPy" href="{% url 'pyfiddleweb:home' %}" class="tooltipped brand-logo">
-        <img class="center-align" src="{% static 'images/python-logo.png' %}">
-      </a>
-      <ul class="right hide-on-med-and-down">
-        <li><a data-position="bottom" data-delay="1000" data-tooltip="Home" class="tooltipped btn fiddle center-align" href="{% url 'pyfiddleweb:home' %}">{ Python Fiddle }</a></li>
-        {% if request.user.is_authenticated %}
-        <li><a class="dropdown-button" href="#!" data-activates="dropdown-header-logged-in">Pythonista: {{request.user}} <span class="fa fa-sort-down padding-10"></span></a></li>
-        {% else %}
-        <li><a class="dropdown-button" href="#!" data-activates="dropdown-header-login-required">Login via Github / Google<span class="fa fa-sort-down padding-10"></span></a></li>
-        {% endif %}
-      </ul>
+<div id="desktop-header" class="ui text menu">
+  <div class="item">
+    <a class="brand-logo" href="{% url 'pyfiddleweb:home' %}">
+      <img src="{% static 'images/python-logo.png' %}">
+      <span>Pyfiddle  <span class="version-font"> v 1.0</span></span>
+    </a>
+  </div>
+  <div class="item buttons-group">
+    <div>
+      <div data-tooltip="Run Fiddle"data-position="bottom right" class="custom-inline-block">
+        <button id="run" class="btn-action ui primary button tiny" value="run"><i class="play icon"></i>Run</button>
+      </div>
+      <div {% if not request.user.is_authenticated %}data-tooltip="Please login to save"{% else %}data-tooltip="Save Fiddle"{% endif %} data-position="bottom right" class="custom-inline-block">
+        <button id="save" class="btn-action ui secondary basic button tiny {% if not request.user.is_authenticated %}disabled{% endif %}" value="save"><i class="save icon"></i>Save</button>
+      </div>
+      <div {% if not request.user.is_authenticated %}data-tooltip="Please login to share"{% else %}data-tooltip="Share Fiddle"{% endif %} data-position="bottom right" class="custom-inline-block">
+        <button id="share" class="btn-action ui secondary basic button tiny {% if not request.user.is_authenticated %}disabled{% endif %}" value="share"><i class="share icon"></i>Share</button>
+      </div>
+      <div {% if not request.user.is_authenticated %}data-tooltip="Please login to star"{% else %}data-tooltip="Bookmark Fiddle"{% endif %} data-position="bottom right" class="custom-inline-block">
+        <button id="star" class="btn-action ui secondary basic button tiny {% if not request.user.is_authenticated %}disabled{% endif %}" value="star"><i class="star icon"></i>Bookmark</button>
+      </div>
+      {% if request.user.is_authenticated %}
+      {% if request.user == script.user %}
+      <div data-tooltip="Delete Fiddle"data-position="bottom right" class="custom-inline-block">
+        <button id="delete" class="btn-action ui secondary basic button tiny" value="delete"><i class="trash icon"></i>Delete</button>
+      </div>
+      {% endif %}
+      {% endif %}
     </div>
-  </nav>
+  </div>
+  <div class="item right">
+    <div>
+      <button id="help" class="ui secondary button tiny help"><i class="help circle icon"></i>Help</button>
+    </div>
+  </div>
+  <div class="ui right dropdown item login-dropdown">
+    {% if request.user.is_authenticated %}
+    {{request.user}}
+    {% else %}
+    Login with Github/Google
+    {% endif %}
+    <i class="dropdown icon"></i>
+    <div class="menu">
+      {% if request.user.is_authenticated %}
+      <a class="item" href="{% url 'pyfiddleweb:logout' %}">Logout</a>
+      {% else %}
+      <a class="item" href="{% url 'social:begin' 'github' %}"><i class="github icon black"></i>Github</a>
+      <a class="item" href="{% url 'social:begin' 'google-oauth2' %}"><i class="google icon red"></i>Google</a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<div class="ui help-content modal">
+  <div class="header">
+    Welcome to Pyfiddle
+  </div>
+  <div class="content">
+    <h3 class="ui header">About Pyfiddle</h3>
+    <p>
+    PyFiddle is a free lightweight Python IDE to run and share
+    Python scripts with some nifty features, created with love by pythonista Priyank Pulumati
+    <a target="_blank" href="https://github.com/priyankcommits"><i class="github icon"></i></a>
+    <a target="_blank" href="https://linkedin.com/in/priyankpulumati/"><i class="linkedin icon"></i></a>
+    and <a target="_blank" href="http://beautifulcode.in">Beautiful Code</a>
+    </p>
+    <div class="ui top attached tabular menu">
+      <a class="item active" data-tab="shortcuts">Shortcuts</a>
+      <a class="item" data-tab="supports">Supports</a>
+      <a class="item" data-tab="limitations">Limitations</a>
+      <a class="item" data-tab="upcoming">Upcoming</a>
+    </div>
+
+    <div class="ui bottom attached tab segment active" data-tab="shortcuts">
+      <div class="ui bulleted list">
+        <div class="item">Clear Editor : Control/Command + Backspace</div>
+        <div class="item">Run Fiddle : Control/Command + Enter</div>
+        <div class="item">Save Fiddle : Control/Command + S</div>
+        <div class="item">Text Editor: Default common shortcuts (Select all, copy, paste, undo)</div>
+      </div>
+    </div>
+
+    <div class="ui bottom attached tab segment" data-tab="supports">
+      <div class="ui bulleted list">
+        <div class="item">Running, Saving and Sharing Fiddles for free</div>
+        <div class="item">Pip installation of Pakcages</div>
+        <div class="item">Arguments to scripts</div>
+        <div class="item">Program inputs to scripts</div>
+        <div class="item">File uploads</div>
+      </div>
+    </div>
+
+    <div class="ui bottom attached tab segment" data-tab="limitations">
+      <div class="ui bulleted list">
+        <div class="item">Compute Time: Max of ~ 4 minutes, 512 MB of RAM</div>
+        <div class="item">Pip packages limited to 5 and dont exceed 100mb</div>
+        <div class="item">File size upto 1MB per file, upto 10 files</div>
+      </div>
+    </div>
+
+    <div class="ui bottom attached tab segment" data-tab="upcoming">
+      <div class="ui bulleted list">
+        <div class="item">Fancier UI with more options</div>
+        <div class="item">Interactive Shell</div>
+        <div class="item">Subscription model</div>
+      </div>
+    </div>
+
+    <p><a target="_blank" href="{% url 'pyfiddleweb:privacy' %}">Website Policy</a></p>
+
+  </div>
+  <div class="actions">
+    <div class="ui button primary deny">Close</div>
+  </div>
 </div>
