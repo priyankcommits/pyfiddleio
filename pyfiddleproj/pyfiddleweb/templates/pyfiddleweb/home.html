@@ -1,0 +1,81 @@
+{% extends "pyfiddleweb/base.html" %}
+{% load static %}
+
+{% block content %}
+{% if messages %}
+{% for message in messages %}
+<script>
+Materialize.toast("{{message}}", 5000);
+</script>
+{% endfor %}
+{% endif %}
+<div class="col s12">
+  <form id="fiddle_form" action="." method="POST" enctype="multipart/form-data" novalidate>
+    {% csrf_token %}
+    <div class="row action-row">
+      <div class="col s2">
+        <div class="switch">
+          <label>
+            2.7
+            {{ form.version }}
+            <span class="lever"></span>
+            3.6
+          </label>
+        </div>
+      </div>
+      <div class="col s1">
+        <a href="{% url 'pyfiddleweb:home' %}" data-position="bottom" data-delay="1000" data-tooltip="New Fiddle" type="button" value="new" class="btn btn-default btn-custom tooltipped new"><span class="fa fa-plus fa-1x"></span></a>
+      </div>
+      <div class="col s2 margin-top-20 padding-top-10" style="margin-left: 10px !important; margin-right: 10px !important;">
+        <div class="input-field col s12">
+          {{ form.fiddle_name }}
+          <label for="fiddle_name">Fiddle Name</label>
+        </div>
+      </div>
+      <div class="col s1 margin-top-20 padding-top-10" style="padding-bottom:20px !important;margin-top: 10px !important;" id="id_public_div">
+        {{ form.private }}
+        <label data-position="bottom" data-delay="50" data-tooltip="Make Fiddle Private" class="tooltipped check-box center-align right" for="id_private">Private</label>
+      </div>
+      <div class="col s4 padding-top-20" style="padding-bottom:20px !important;">
+        <div class="tooltipped display-inline" data-position="bottom" data-delay="1000" data-tooltip="{% if not request.user.is_authenticated %} Please login to share{% else%} Share Fiddle{% endif %}">
+          <button id="share" type="button" value="share" class="btn btn-default btn-custom btn-action share {% if not request.user.is_authenticated %}disabled{% endif %}"><span class="fa fa-share fa-1x"></span></button>
+        </div>
+        <div class="tooltipped display-inline" data-position="bottom" data-delay="1000" data-tooltip="{% if not request.user.is_authenticated %} Please login to save{% else%} Save Fiddle{% endif %}">
+          <button id="save" type="button" value="save" class="btn btn-default btn-custom btn-action save {% if not request.user.is_authenticated %}disabled{% endif %}"><span class="fa fa-save fa-1x"></span></button>
+        </div>
+        <div class="tooltipped display-inline" data-position="bottom" data-delay="1000" data-tooltip="Run Fiddle">
+          <button id="run" type="button" value="run" class="btn btn-default btn-custom btn-action run"><span class="fa fa-play fa-1x"></span></button>
+        </div>
+        <div class="tooltipped display-inline" data-position="bottom" data-delay="1000" data-tooltip="{% if not request.user.is_authenticated %} Please login to star{% else%} Star Fiddle{% endif %}">
+          <button id="star" type="button" value="star" class="btn btn-default btn-custom btn-action star {% if not request.user.is_authenticated %}disabled{% endif %}"><span class="fa fa-star fa-1x"></span></button>
+        </div>
+        {% if request.user.is_authenticated and script.user == request.user %}
+        <div class="tooltipped display-inline" data-position="bottom" data-delay="1000" data-tooltip="Delete Fiddle">
+          <button id="delete" type="button" value="delete" class="btn btn-default btn-custom btn-action delete"><span class="fa fa-trash fa-1x"></span></button>
+        </div>
+        {% endif %}
+      </div>
+      <div class="col s1"></div>
+    </div>
+    <div class="row">
+      <div class="input-field col s12">
+        {{ form.code }}
+      </div>
+    </div>
+  </form>
+  <div id="shell_div" class="row">
+    <div class="col s12">
+      <pre id="shell_output" class="custom-monokai"></pre>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripting %}
+<script>
+$(window).load(function() {
+  {% if i == "true" %}
+  $('#features').trigger("click");
+  {% endif %}
+});
+</script>
+{% endblock %}

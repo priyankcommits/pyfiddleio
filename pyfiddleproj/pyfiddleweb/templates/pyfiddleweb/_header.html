@@ -1,0 +1,26 @@
+{% load static %}
+<div class="navbar-fixed">
+  <!-- Dropdown Structure -->
+  <ul id="dropdown-header-login-required" class="dropdown-content">
+    <li><a class="github" href="{% url "social:begin" "github" %}"><span class="fa fa-github fa-2x"></span> Github</a></li>
+    <li><a class="google" href="{% url "social:begin" "google-oauth2" %}"><span class="fa fa-google fa-2x"></span> Google</a></li>
+  </ul>
+  <ul id="dropdown-header-logged-in" class="dropdown-content">
+    <li><a class="github" href="{% url 'pyfiddleweb:logout' %}"><span class="fa fa-power-off fa-2x"></span> Logout</a></li>
+  </ul>
+  <nav>
+    <div class="nav-wrapper">
+      <a data-position="bottom" data-delay="1000" data-tooltip="PyPy" href="{% url 'pyfiddleweb:home' %}" class="tooltipped brand-logo">
+        <img class="center-align" src="{% static 'images/python-logo.png' %}">
+      </a>
+      <ul class="right hide-on-med-and-down">
+        <li><a data-position="bottom" data-delay="1000" data-tooltip="Home" class="tooltipped btn fiddle center-align" href="{% url 'pyfiddleweb:home' %}">{ Python Fiddle }</a></li>
+        {% if request.user.is_authenticated %}
+        <li><a class="dropdown-button" href="#!" data-activates="dropdown-header-logged-in">Pythonista: {{request.user}} <span class="fa fa-sort-down padding-10"></span></a></li>
+        {% else %}
+        <li><a class="dropdown-button" href="#!" data-activates="dropdown-header-login-required">Login via Github / Google<span class="fa fa-sort-down padding-10"></span></a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </nav>
+</div>

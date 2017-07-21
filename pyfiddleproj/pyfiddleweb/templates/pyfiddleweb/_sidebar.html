@@ -1,0 +1,53 @@
+{% load static %}
+<ul id="slide-out" class="side-nav fixed">
+  <ul class="collapsible" data-collapsible="accordion">
+    <li data-position="bottom" data-delay="1000" data-tooltip="Saved Fiddle(s)" class="tooltipped">
+      <div class="collapsible-header">
+          <span class="fa fa-chevron-down fa-1x li-icon-save li-header-left "></span>
+          <span class="li-icon-save  padding-left-30-percent">Saved Fiddles</span>
+      </div>
+      <div class="collapsible-body">
+        <ul class="collection">
+          {% if saved_fiddles %}
+          {% for saved_fiddle in saved_fiddles %}
+          <li data-position="bottom" data-delay="1000" data-tooltip="{{saved_fiddle.script.user}}" class="tooltipped collection-item"><a href="{% url 'pyfiddleweb:fiddle' fiddle_id=saved_fiddle.script.id %}">{{saved_fiddle.script.fiddle_name}}<span class="new badge li-play" data-badge-caption="runs">{{saved_fiddle.script.runs}}</span></a></li>
+          {% endfor %}
+          {% else %}
+          <li class="collection-item">No Saved Fiddles</li>
+          {% endif %}
+        </ul>
+      </div>
+    </li>
+    <li data-position="bottom" data-delay="1000" data-tooltip="Starred Fiddle(s)" class="tooltipped">
+      <div class="collapsible-header">
+          <span class="fa fa-chevron-down fa-1x li-icon-star li-header-left "></span>
+          <span class="li-icon-star  padding-left-30-percent">Starred Fiddles</span>
+      </div>
+      <div class="collapsible-body">
+        <ul class="collection">
+          {% if starred_fiddles %}
+          {% for starred_fiddle in starred_fiddles %}
+          <li data-position="bottom" data-delay="1000" data-tooltip="{{starred_fiddle.script.user}}" class="tooltipped collection-item"><a href="{% url 'pyfiddleweb:fiddle' fiddle_id=starred_fiddle.script.id %}">{{starred_fiddle.script.fiddle_name}}<span class="new badge li-play" data-badge-caption="runs">{{starred_fiddle.script.runs}}</span></a></li>
+          {% endfor %}
+          {% else %}
+          <li class="collection-item">No Starred Fiddles</li>
+          {% endif %}
+        </ul>
+      </div>
+    </li>
+    <li data-position="bottom" data-delay="1000" data-tooltip="Most Run Fiddles" class="tooltipped">
+      <div class="collapsible-header">
+        <span class="fa fa-chevron-down fa-1x li-icon-play li-header-left"></span>
+        <span class="li-icon-play padding-left-30-percent">Popular Run Fiddles</span>
+      </div>
+      <div class="collapsible-body">
+        <ul class="collection">
+          {% for most_run in most_runs %}
+          <li data-position="bottom" data-delay="1000" data-tooltip="{{most_run.user}}" class="tooltipped collection-item"><a href="{% url 'pyfiddleweb:fiddle' fiddle_id=most_run.id %}">{{most_run.fiddle_name}}<span class="new badge li-play" data-badge-caption="runs">{{most_run.runs}}</span></a></li>
+          {% endfor %}
+        </ul>
+      </div>
+    </li>
+  </ul>
+</ul>
+<a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a>

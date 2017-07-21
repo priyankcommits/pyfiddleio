@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+{% load static %}
+<html>
+  <head>
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="{% static "images/favicon.ico" %}">
+    <title>Pyfiddle </title>
+    <meta name="application-name" content="https://pyfiddle.io" />
+    <meta name="author" content="Priyank Pulumati" />
+    <meta name="distributor" content="" />
+    <meta name="robots" content="All" />
+    <meta name="description" content="PyFiddle is a free lightweight Python IDE to run and share Python scripts with some nifty features, created with love by pythonista"/>
+    <meta name="keywords" content="" />
+    <meta name="rating" content="General" />
+    <meta name="dcterms.title" content="Pyfiddle" />
+    <meta name="dcterms.contributor" content="Priyank Pulumati" />
+    <meta name="dcterms.creator" content="Priyank Pulumati" />
+    <meta name="dcterms.publisher" content="Priyank Pulumati" />
+    <meta name="dcterms.description" content="PyFiddle is a free lightweight Python IDE to run and share Python scripts with some nifty features, created with love by pythonista Priyank Pulumati"/>
+    <meta name="dcterms.rights" content="pyfiddle" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Pyfiddle" />
+    <meta property="og:description" content="PyFiddle is a free lightweight Python IDE to run and share Python scripts with some nifty features, created with love by pythonista Priyank Pulumati" />
+    <meta property="twitter:title" content="Pyfiddle" />
+    <meta property="twitter:description" content="PyFiddle is a free lightweight Python IDE to run and share Python scripts with some nifty features, created with love by pythonista Priyank Pulumati"/>
+    <link rel="stylesheet" href='{% static "js/lib/codemirror.css" %}'>
+    <link rel="stylesheet" href='{% static "js/theme/monokai.css" %}'>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/materialize/0.99.0/css/materialize.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+    <link rel="stylesheet" href='{% static "css/style.css" %}'>
+    {% block css %}{% endblock %}
+  </head>
+  <body>
+    <script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-102352576-1', 'auto');
+ga('send', 'pageview');
+    </script>
+    <div id="main-container" style="display:none !important;">
+      {% include "pyfiddleweb/_header.html" %}
+      <div class="row">
+        <div class="col s12" id="main-page">
+          {% include "pyfiddleweb/_sidebar.html" %}
+          {% include "pyfiddleweb/_sidebar-right.html" %}
+          <div class="preloader-parent-div">
+            <div class="preloader-wrapper big active">
+              <div class="spinner-layer spinner-blue">
+                <div class="circle-clipper left">
+                  <div class="circle"></div>
+                </div><div class="gap-patch">
+                  <div class="circle"></div>
+                </div><div class="circle-clipper right">
+                  <div class="circle"></div>
+                </div>
+              </div>
+              <div class="spinner-layer spinner-red">
+                <div class="circle-clipper left">
+                  <div class="circle"></div>
+                </div><div class="gap-patch">
+                  <div class="circle"></div>
+                </div><div class="circle-clipper right">
+                  <div class="circle"></div>
+                </div>
+              </div>
+              <div class="spinner-layer spinner-yellow">
+                <div class="circle-clipper left">
+                  <div class="circle"></div>
+                </div><div class="gap-patch">
+                  <div class="circle"></div>
+                </div><div class="circle-clipper right">
+                  <div class="circle"></div>
+                </div>
+              </div>
+              <div class="spinner-layer spinner-green">
+                <div class="circle-clipper left">
+                  <div class="circle"></div>
+                </div><div class="gap-patch">
+                  <div class="circle"></div>
+                </div><div class="circle-clipper right">
+                  <div class="circle"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="main-body">
+            {% block content %}
+            {% endblock %}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="info">
+      <a style="display: none !important;" data-position="top" data-delay="1000" data-tooltip="About" id="info" href="#modal-info" class="btn btn-default li-play tooltipped"><span class="fa fa-info"></span></a>
+    </div>
+    <div id="modal-info" class="modal bottom-sheet">
+      <div class="modal-content">
+        <h6>About PyFiddle</h6>
+        <p>PyFiddle is a free lightweight Python IDE to run and share Python scripts with some nifty features, created with love by pythonista <a href="mailto:webmaster@pyfiddle.io?Subject=Hello%20PyFiddle" target="_top" class="email-link">Priyank Pulumati</a>
+        <a data-position="top" data-delay="1000" data-tooltip="LinkedIn" target="_blank" href="https://www.linkedin.com/in/priyankpulumati/" class="tooltipped btn btn-default star"><span class="fa fa-linkedin fa-1x"></a>
+        <a data-position="top" data-delay="1000" data-tooltip="GitHub" target="_blank" href="https://github.com/priyankcommits" class="tooltipped btn btn-default star"><span class="fa fa-github fa-1x"></a></span>
+        <a href="/privacy/" target="_blank" class="email-link">Website Policy</a>
+        </p>
+        <form id="email_form" action="." method="POST" enctype="multipart/form-data" novalidate class="padding-top-20">
+          {% csrf_token %}
+          <div class="custom row">
+            <div class="custom input-field col s2">
+              <input id="email" name="email" type="email" class="validate">
+              <label for="email">Email</label>
+            </div>
+            <div class="col s1"></div>
+            <div id="subject" name="subject" class="custom input-field col s1">
+              <select id="subject_topic" name="subject_topic">
+                <option value="General" selected>General</option>
+                <option value="Bug/Issue">Bug / Issue</option>
+                <option value="Suggestion">Suggestion</option>
+              </select>
+              <label class="margin-top-20 white" style="background-color: transparent !important">Subject</label>
+            </div>
+            <div class="col s1"></div>
+            <div class="custom input-field col s6">
+              <input id="message" name="message" type="text" class="validate">
+              <label for="message">Message</label>
+            </div>
+            <div class="input-field col s1">
+              <button type="button" id="email_form_button" class="btn btn-default star"><span class="fa fa-send fa-1x"></span></button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="modal-footer">
+    </div>
+    <div class="features">
+      <a style="display: none !important;" data-position="top" data-delay="1000" data-tooltip="Features" id="features" href="#modal-features" class="btn btn-default li-star tooltipped"><span class="fa fa-ellipsis-h"></span></a>
+    </div>
+    <div id="modal-features" class="modal bottom-sheet height-400">
+      <div class="modal-content">
+        <div class="row">
+          <div class="col s4">
+            <ul class="collection with-header">
+              <li class="collection-header"><h6>Shortcuts:</h6></li>
+              <li class="collection-item collection-item-height-50">Clear Editor : Control/Command + Backspace</li>
+              <li class="collection-item collection-item-height-50">Run Fiddle   : Control/Command + Enter </li>
+              <li class="collection-item collection-item-height-50">Save Fiddle  : Control/Command + S</li>
+              <li class="collection-item collection-item-height-50">Text Editor: Default common shortcuts (Select all, copy, paste, undo)</li>
+            </ul>
+          </div>
+          <div class="col s4">
+            <ul class="collection with-header">
+              <li class="collection-header"><h6>Supports:</h6></li>
+              <li class="collection-item collection-item-height-50">Saving and Sharing Fiddles for free</li>
+              <li class="collection-item collection-item-height-50">Pip installation of Pakcages</li>
+              <li class="collection-item collection-item-height-50">Arguments to scripts</li>
+              <li class="collection-item collection-item-height-50">File uploads</li>
+            </ul>
+          </div>
+          <div class="col s4">
+            <ul class="collection with-header">
+              <li class="collection-header"><h6>Limitations:</h6></li>
+              <li class="collection-item collection-item-height-50">Compute Time: Max of ~ 4 minutes, 256 MB of RAM</li>
+              <li class="collection-item collection-item-height-50">Pip packages limited to 5 and run without need for compiling</li>
+              <li class="collection-item collection-item-height-50">Python 2.7 (as of now)</li>
+              <li class="collection-item collection-item-height-50">File size upto 1MB per file, upto 10 files</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <a target="_blank" href="/privacy/" class="modal-action modal-close waves-effect waves-blue btn-flat delete">Website Policy</a>
+        <a href="#!" class="modal-action modal-close waves-effect waves-blue btn-flat run">Agree</a>
+      </div>
+    </div>
+    <div id="share-modal" class="modal">
+      <div class="modal-content width-70-percent display-inline">
+        <h4>Share Python Fiddle</h4>
+        <input class="width-70-percent display-inline" type="text" id="url_to_display_text" value=""/>
+        <button data-position="bottom" data-delay="1000" data-tooltip="Copy" class="width-20-percent tooltipped display-inline btn btn-default black" id="button_copy_url"><span class="fa fa-copy fa-1x"></span></button>
+      </div>
+      <div class="modal-footer width-20-percent display-inline">
+        <a href="#!" data-position="bottom" data-delay="1000" data-tooltip="Close" class="tooltipped modal-action modal-close waves-effect waves-red btn-flat btn-default li-delete">Close</a>
+      </div>
+    </div>
+    </div>
+    <div id="small_devices" style="display:none !important">
+      <div class="preloader-small-parent-div">
+        <div class="preloader-small-wrapper small active">
+          <div class="spinner-layer spinner-yellow">
+            <div class="circle-clipper left">
+              <div class="circle"></div>
+            </div><div class="gap-patch">
+              <div class="circle"></div>
+            </div><div class="circle-clipper right">
+              <div class="circle"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s6">
+          <img src="{% static 'images/python-logo.png' %}" class="custom-image">
+        </div>
+        <div class="col s6">
+          <h5 style="color: white !important;">{ Python Fiddle }</h5>
+        </div>
+        <div class="col s12">
+          <h6 style="color: white !important;"> PyFiddle.io is not desgined to work on small or medium sized devices, please use a bigger / higher resolution device</h6>
+          <h6 style="color: white !important;"> Please use the below form for contacting me or at <a href="mailto:webmaster@pyfiddle.io?Subject=Hello%20PyFiddle" target="_top">Priyank Pulumati</a></h6>
+        </div>
+        <div class="col s12">
+          <form id="email_form_2" action="." method="POST" enctype="multipart/form-data" novalidate class="padding-top-20">
+            {% csrf_token %}
+            <div class="custom row center-align">
+              <div class="custom-small input-field col s12">
+                <input id="email_2" name="email" type="text" class="validate">
+                <label for="email">Email</label>
+              </div>
+              <div id="subject_2" name="subject" class="custom-small input-field col s12">
+                <select id="subject_topic_2" name="subject_topic">
+                  <option value="General" selected>General</option>
+                  <option value="Bug/Issue">Bug / Issue</option>
+                  <option value="Suggestion">Suggestion</option>
+                </select>
+                <label class="margin-top-20 white" style="background-color: transparent !important">Subject</label>
+              </div>
+              <div class="custom-small input-field col s12">
+                <input id="message_2" name="message" type="text" class="validate">
+                <label for="message">Message</label>
+              </div>
+              <div class="input-field col s1">
+                <button type="button" id="email_form_button_2" class="btn btn-default star"><span class="fa fa-send fa-1x"></span></button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!-- js files -->
+    <script src="{% static "js/lib/codemirror.js" %}"></script>
+    <script src="{% static "js/mode/python/python.js" %}"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/materialize/0.99.0/js/materialize.min.js"></script>
+    <script src="{% static "js/jquery.cookie.js" %}"></script>
+    <script src="{% static "js/jquery.form.min.js" %}"></script>
+    <script src="{% static "js/purl.js" %}"></script>
+    <script src="{% static "js/main.js" %}"></script>
+    <!-- page js -->
+    {% block scripting %}{% endblock %}
+  </body>
+</html>
