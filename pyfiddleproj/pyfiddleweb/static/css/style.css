@@ -183,12 +183,25 @@ html, body {
 .CodeMirror-scroll {
   overflow-y: hidden !important;
 }
+.CodeMirror-scroll:hover {
+  overflow-y: auto !important;
+}
+.CodeMirror-scroll:active {
+  overflow-y: auto !important;
+}
 .sidebar-list-fiddles {
   max-height: 150px !important;
-  overflow-y: hidden;
+  overflow-y: hidden !important;
 }
 .sidebar-list-fiddles:hover {
   overflow-y: auto !important;
+}
+.sidebar-fiddle-text {
+  text-overflow: ellipsis !important;
+  max-width: 120px !important;
+  white-space: nowrap !important;
+  display: inline-block !important;
+  overflow: hidden !important;
 }
 .version-font {
   font-size: 10px !important;
