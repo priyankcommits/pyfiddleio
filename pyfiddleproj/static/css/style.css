@@ -1,4 +1,8 @@
 /*semantic css*/
+html, body {
+  height: 100% !important;
+  width: 100% !important;
+}
 .brand-logo {
   margin-left: 30px;
 }
@@ -45,10 +49,6 @@
 .fiddle-buttons {
   text-align: center;
 }
-.shell-result {
-  padding-left: 0em !important;
-  background-color: #272822 !important;
-}
 .buttons-group {
   margin-left: calc(18.5% - 170px) !important;
 }
@@ -58,11 +58,41 @@
 .fiddle-container .sixteen.column {
   padding-bottom: 0 !important;
 }
+#home-div {
+  position: inherit !important;
+  background-color: #FFF !important;
+}
+#code-div {
+  padding-top: 20px !important;
+}
+.shell-result {
+  height: 100% !important;
+  border: #F7F7F7 !important;
+  border-style: solid !important;
+  overflow-y: auto !important;
+}
 .shell-result #shell_output {
   margin-top: 0;
+  background-color: #FFF !important;
+  white-space: pre-wrap !important;
+  word-break: break-all !important;
+}
+.shell-result::-webkit-scrollbar {
+  display: none !important;
+}
+#shell_output {
+  color: #000 !important;
+  background-color: #FFF !important;
+}
+.bash-name {
+  color: #2AA198;
+}
+.bash-output {
+  color: #000;
 }
 .python-editor, .shell-result {
   padding: 0 !important;
+  background-color: #FFF !important;
 }
 .CodeMirror-scroll {
   margin: 0 !important;
@@ -78,12 +108,12 @@
 .python-version .toggle-container {
   display: inline-block;
 }
-.python-version .v2-6{
+.python-version .v2-7{
   vertical-align: top;
   margin-right: 10px;
   font-weight: 900;
 }
-.python-version .v3-7{
+.python-version .v3-6{
   font-weight: 900;
   vertical-align: top !important;
 }
@@ -103,50 +133,93 @@
 .file-group {
   margin-top: 18px;
 }
-/*end of semantic ui css*/
-/* temp */
-
-/* JS Splitter for Editor and Shell */
-.div-splitter {
-	height: 300px;
-	width: 800px;
-	border: 5px solid red;
-}
-.div-splitter div {
-	overflow: auto;
-}
-.vsplitbar {
-	width: 5px;
-	background: black;
-}
-.splitter {
-    height: 400px;
-    margin: 1em 3em;
-    border: 4px solid violet;
-    background: green;
-}
-.ui-state-default { background-color: black }
-.ui-state-hover { background-color: #bdb }
-.ui-state-highlight { background-color: #add }
-.ui-state-error { background-color: #eaa }
-.splitter-pane {
+.ui.styled.accordion .content {
+    max-height: 200px;
     overflow: auto;
 }
-.splitter-bar-vertical {
-    width: 6px;
-    background-image: url(img/vgrabber.gif);
-    background-repeat: no-repeat;
-    background-position: center;
+.feedback {
+  position: absolute;
+  bottom: 30px;
+  left: calc(50% - 50px);
 }
-.splitter-bar-vertical-docked {
-    width: 10px;
-    background-image: url(img/vdockbar-trans.gif);
-    background-repeat: no-repeat;
-    background-position: center;
+.toast-message {
+  position: absolute !important;
+  z-index: 1200;
+  left: 1% !important;
+  bottom: 1% !important;
 }
-.splitter-bar.ui-state-highlight {
-    opacity: 0.7;
+#loader-div {
+  position: absolute !important;
+  height: 100% !important;
+  width: 100% !important;
+  background-color: #FFF !important;
+  z-index: 88888;
 }
-.splitter-iframe-hide {
-    visibility: hidden;
+#loader {
+  position: absolute !important;
+  top: 45%;
+  left: 50%;
+  z-index: 99999;
+}
+#spinner-div {
+  position: absolute !important;
+  height: 100% !important;
+  width: 100% !important;
+  background-color: transparent !important;
+  z-index: 88888;
+}
+#spinner {
+  position: absolute !important;
+  top: 45%;
+  left: 50%;
+  z-index: 99999;
+}
+#three-inputs {
+  padding-top: 15px !important;
+}
+.custom-inline-block {
+  display: inline-block !important;
+}
+.CodeMirror-scroll {
+  overflow-y: hidden !important;
+}
+.CodeMirror-scroll:hover {
+  overflow-y: auto !important;
+}
+.CodeMirror-scroll:active {
+  overflow-y: auto !important;
+}
+.sidebar-list-fiddles {
+  max-height: 150px !important;
+  overflow-y: hidden !important;
+}
+.sidebar-list-fiddles:hover {
+  overflow-y: auto !important;
+}
+.sidebar-fiddle-text {
+  text-overflow: ellipsis !important;
+  max-width: 120px !important;
+  white-space: nowrap !important;
+  display: inline-block !important;
+  overflow: hidden !important;
+}
+.version-font {
+  font-size: 10px !important;
+  vertical-align: bottom !important;
+  margin: 0 !important;
+}
+.brand-logo span {
+  display: initial !important;
+}
+.pointer {
+  cursor: pointer;
+}
+.custom-padding-10 {
+  padding: 10px !important;
+}
+.custom-overflow-allowed {
+  overflow-y: auto !important;
+}
+.custom-overflow-not-allowed {
+  overflow-y: hidden !important;
 }
