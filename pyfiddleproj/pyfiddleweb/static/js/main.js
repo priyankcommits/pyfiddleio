@@ -92,7 +92,8 @@ function exec_run(data) {
     }
     if (data.statusCode == 200) {
       $(".shell-result").animate({ scrollTop: $('.shell-result').prop("scrollHeight")}, 1000);
-      $("#shell_output").html($("#shell_output").html()+"<span class='bash-name'>read-only@bash: <span class='bash-output'>"+atob(data.output)+"</span>");
+      $("#shell_output").html($("#shell_output").html()+"<span class='bash-name'>read-only@bash: </span><span class='bash-output'></span>");
+      $('.bash-output').last().text(atob(data.output));
       toaster("Successfully ran Fiddle", 4000);
     }
   }
