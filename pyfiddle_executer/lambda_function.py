@@ -5,7 +5,6 @@ import os
 import base64
 import pip
 import traceback
-import sys
 
 print('Loading function')
 
@@ -21,7 +20,6 @@ def lambda_handler(event, context):
 
 
 def execute(event):
-    sys.path.append(os.getenv("LAMBDA_TASK_ROOT"))
     remove_dirs = Popen("rm -rf /tmp/*", shell=True)
     remove_dirs.communicate()
     fil_path = "/tmp/"
@@ -46,8 +44,7 @@ def execute(event):
         pip.main(["install", '-t', fil_path, "setuptools"])
         pip.main(["install", '-t', fil_path, "wheel"])
         for package in packages:
-            if package != "numpy" or package != "pandas" or package != "requests":
-                pip.main(["install", '-t', fil_path, package])
+            pip.main(["install", '-t', fil_path, package])
     input_string = ''
     for inp in event["inputs"].split(","):
         input_string += str(inp)+"\n"
