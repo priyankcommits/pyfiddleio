@@ -46,7 +46,8 @@ def execute(event):
         pip.main(["install", '-t', fil_path, "setuptools"])
         pip.main(["install", '-t', fil_path, "wheel"])
         for package in packages:
-            pip.main(["install", '-t', fil_path, package])
+            if package != "numpy" or package != "pandas" or package != "requests":
+                pip.main(["install", '-t', fil_path, package])
     input_string = ''
     for inp in event["inputs"].split(","):
         input_string += str(inp)+"\n"
