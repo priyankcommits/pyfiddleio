@@ -1,78 +1,68 @@
-{% extends "pyfiddleweb/base.html" %}
-{% load static %}
-
-{% block content %}
-{% if messages %}
-{% for message in messages %}
+{% extends "pyfiddleweb/base.html" %} {% load static %} {% block content %} {% if messages %} {% for message in messages %}
 <script>
-toaster("{{message}}", 4000);
+    toaster("{{message}}", 4000);
 </script>
-{% endfor %}
-{% endif %}
+{% endfor %} {% endif %}
 <div id="home-div">
-  <form id="fiddle_form" action="." method="POST" enctype="multipart/form-data" novalidate>
-    {% csrf_token %}
-    <div class="sixteen wide column">
-      <div class="ui form">
-        <div id="three-inputs" class="three fields">
-          <div class="field">
-            <label for="id_packages">Pip Packages (comma seperated)</label>
-            {{ form.packages }}
-          </div>
-          <div class="field">
-            <label for="id_commands">Arguments (comma seperated)</label>
-            {{form.commands }}
-          </div>
-          <div class="field">
-            <label for="id_inputs">Program inputs (comma seperated, ordered)</label>
-            {{ form.inputs }}
-          </div>
+    <form id="fiddle_form" action="." method="POST" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+        <div class="sixteen wide column">
+            <div class="ui form">
+                <div id="three-inputs" class="three fields">
+                    <div class="field">
+                        <label for="id_packages">Pip Packages (comma seperated)</label> {{ form.packages }}
+                    </div>
+                    <div class="field">
+                        <label for="id_commands">Arguments (comma seperated)</label> {{form.commands }}
+                    </div>
+                    <div class="field">
+                        <label for="id_inputs">Program inputs (comma seperated, ordered)</label> {{ form.inputs }}
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-    <div id="code-div" class="ui grid divided">
-      <div class="ten wide column" style="padding: 0 !important;">
-        <div class="python-editor">
-          {{ form.code }}
+        <div id="code-div" class="ui grid divided">
+            <div class="ten wide column" style="padding: 0 !important;">
+                <div class="python-editor">
+                    {{ form.code }}
+                </div>
+            </div>
+            <div class="six wide column" style="padding: 0 !important;">
+                <div class="shell-result">
+                    <pre id="shell_output" class="custom-monokai"><span class="bash-name">read-only@bash:</span><span class="bash-output"> Your Output Here<br></span></pre>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="six wide column" style="padding: 0 !important;">
-        <div class="shell-result">
-          <pre id="shell_output" class="custom-monokai"><span class="bash-name">read-only@bash:</span><span class="bash-output"> Your Output Here<br></span></pre>
-        </div>
-      </div>
-    </div>
-  </form>
+    </form>
 </div>
 <div class="ui share-content modal">
-  <div class="header">
-    Share Fiddle
-  </div>
-  <div class="content">
-    <div class="ui grid divided">
-      <div class="fourteen wide column">
-        <div class="ui form">
-        <div class="field">
-          <input id="url_to_display_text" type="text" value="" style="width:100% !important;"/>
-        </div>
-        </div>
-      </div>
-      <div class="two wide column">
-        <i id="button_copy_url" class="copy circle icon pointer" style="margin-top: 10px !important;"></i>
-      </div>
+    <div class="header">
+        Share Fiddle
     </div>
-  </div>
-  <div class="actions">
-    <div class="ui button primary deny">Close</div>
-  </div>
+    <div class="content">
+        <div class="ui grid divided">
+            <div class="fourteen wide column">
+                <div class="ui form">
+                    <div class="field">
+                        <input id="url_to_display_text" type="text" value="" style="width:100% !important;" />
+                    </div>
+                </div>
+            </div>
+            <div class="two wide column">
+                <i id="button_copy_url" class="copy circle icon pointer" style="margin-top: 10px !important;"></i>
+            </div>
+        </div>
+    </div>
+    <div class="actions">
+        <div class="ui button primary deny">Close</div>
+    </div>
 </div>
-{% endblock %}
-{% block scripting %}
+{% endblock %} {% block scripting %}
 <script>
-$(window).load(function() {
-  {% if i == "true" %}
-  $('#help').trigger("click");
-  {% endif %}
-});
+    $(window).load(function() {
+        {% if i == "true" %}
+        $('#help').trigger("click"); 
+        {% endif %}
+    });
 </script>
 {% endblock %}
