@@ -5,6 +5,7 @@ import os
 import base64
 import pip
 import traceback
+import sys
 
 print('Loading function')
 
@@ -20,6 +21,7 @@ def lambda_handler(event, context):
 
 
 def execute(event):
+    sys.path.append(os.getenv("LAMBDA_TASK_ROOT"))
     remove_dirs = Popen("rm -rf /tmp/*", shell=True)
     remove_dirs.communicate()
     fil_path = "/tmp/"
@@ -92,6 +94,8 @@ def _remove_envs():
         'AWS_LAMBDA_FUNCTION_MEMORY_SIZE',
         'AWS_LAMBDA_FUNCTION_VERSION',
         'PATH',
+        'LAMBDA_TASK_ROOT',
+        'LD_LIBRARY_PATH'
     ]
     try:
         for key, value in os.environ.items():
