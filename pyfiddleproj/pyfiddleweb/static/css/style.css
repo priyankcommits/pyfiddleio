@@ -1,15 +1,20 @@
 /*semantic css*/
-html, body {
-  height: 100% !important;
-  width: 100% !important;
+
+html,
+body {
+    height: 100% !important;
+    width: 100% !important;
 }
+
 .brand-logo {
-  margin-left: 30px;
+    margin-left: 30px;
 }
+
 .brand-logo img {
-  width: 32px;
+    width: 32px;
 }
-.brand-logo span{
+
+.brand-logo span {
     vertical-align: top;
     display: inline-block;
     font-size: 24px;
@@ -17,209 +22,263 @@ html, body {
     margin-left: 10px;
     line-height: 32px;
 }
+
 .ui.text.menu {
-  box-shadow: 0 1px 3px rgba(0,0,0,0.12);
-  margin-top: 0px;
-  height: 60px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+    margin-top: 0px;
+    height: 60px;
 }
-.ui.text.menu .item.dropdown{
-  margin-right: 30px;
+
+.ui.text.menu .item.dropdown {
+    margin-right: 30px;
 }
+
 .ui.right.dropdown.item.login-dropdown {
-  margin-left : 0 !important;
+    margin-left: 0 !important;
 }
+
 .side-navbar {
-  min-height: 88vh;
-  margin-left: 1em;
+    min-height: 88vh;
+    margin-left: 1em;
 }
+
 #file {
-  display: none;
+    display: none;
 }
+
 .fiddle-name label {
-  display: inline-block !important;
+    display: inline-block !important;
 }
+
 .fiddle-name .private {
-  display: inline-block;
-  margin-left: 12px;
+    display: inline-block;
+    margin-left: 12px;
 }
-.side-navbar .ui.header:first-child{
-   margin-bottom: 6px;
-   margin-top: 1.6em;
+
+.side-navbar .ui.header:first-child {
+    margin-bottom: 6px;
+    margin-top: 1.6em;
 }
+
 .fiddle-buttons {
-  text-align: center;
+    text-align: center;
 }
+
 .buttons-group {
-  margin-left: calc(18.5% - 170px) !important;
+    margin-left: calc(18.5% - 170px) !important;
 }
+
 .thirteen .ui.grid {
-  margin-right: 0 !important;
+    margin-right: 0 !important;
 }
+
 .fiddle-container .sixteen.column {
-  padding-bottom: 0 !important;
+    padding-bottom: 0 !important;
 }
+
 #home-div {
-  position: inherit !important;
-  background-color: #FFF !important;
+    position: inherit !important;
+    background-color: #FFF !important;
 }
+
 #code-div {
-  padding-top: 20px !important;
+    padding-top: 20px !important;
 }
+
 .shell-result {
-  height: 100% !important;
-  border: #F7F7F7 !important;
-  border-style: solid !important;
-  overflow-y: auto !important;
+    height: 100% !important;
+    border: #F7F7F7 !important;
+    border-style: solid !important;
+    overflow-y: auto !important;
 }
+
 .shell-result #shell_output {
-  margin-top: 0;
-  background-color: #FFF !important;
-  white-space: pre-wrap !important;
-  word-break: break-all !important;
+    margin-top: 0;
+    background-color: #FFF !important;
+    white-space: pre-wrap !important;
+    word-break: break-all !important;
 }
+
 .shell-result::-webkit-scrollbar {
-  display: none !important;
+    display: none !important;
 }
+
 #shell_output {
-  color: #000 !important;
-  background-color: #FFF !important;
+    color: #000 !important;
+    background-color: #FFF !important;
 }
+
 .bash-name {
-  color: #2AA198;
+    color: #2AA198;
 }
+
 .bash-output {
-  color: #000;
+    color: #000;
 }
-.python-editor, .shell-result {
-  padding: 0 !important;
-  background-color: #FFF !important;
+
+.python-editor,
+.shell-result {
+    padding: 0 !important;
+    background-color: #FFF !important;
 }
+
 .CodeMirror-scroll {
-  margin: 0 !important;
+    margin: 0 !important;
 }
+
 .python-version {
-  margin-bottom: 20px;
+    margin-bottom: 20px;
 }
+
 .toggle-container {
-   position: relative;
-   top: 6px;
-   left: 6px;
+    position: relative;
+    top: 6px;
+    left: 6px;
 }
+
 .python-version .toggle-container {
-  display: inline-block;
+    display: inline-block;
 }
-.python-version .v2-7{
-  vertical-align: top;
-  margin-right: 10px;
-  font-weight: 900;
+
+.python-version .v2-7 {
+    vertical-align: top;
+    margin-right: 10px;
+    font-weight: 900;
 }
-.python-version .v3-6{
-  font-weight: 900;
-  vertical-align: top !important;
+
+.python-version .v3-6 {
+    font-weight: 900;
+    vertical-align: top !important;
 }
+
 .ui.toggle.checkbox input:checked~label:before {
     background-color: #2185d0!important;
-    opacity:0.6;
+    opacity: 0.6;
 }
+
 .ui.toggle.checkbox label:after {
-  background-color: #2185d0;
+    background-color: #2185d0;
 }
+
 .ui.styled.accordion {
-  margin-top: 18px;
+    margin-top: 18px;
 }
+
 .ui.styled.accordion .content {
     padding: .2em 1em .3em;
 }
+
 .file-group {
-  margin-top: 18px;
+    margin-top: 18px;
 }
+
 .ui.styled.accordion .content {
     max-height: 200px;
     overflow: auto;
 }
+
 .feedback {
-  position: absolute;
-  bottom: 30px;
-  left: calc(50% - 50px);
+    position: absolute;
+    bottom: 30px;
+    left: calc(50% - 50px);
 }
+
 .toast-message {
-  position: absolute !important;
-  z-index: 1200;
-  left: 1% !important;
-  bottom: 1% !important;
+    position: absolute !important;
+    z-index: 1200;
+    left: 1% !important;
+    bottom: 1% !important;
 }
+
 #loader-div {
-  position: absolute !important;
-  height: 100% !important;
-  width: 100% !important;
-  background-color: #FFF !important;
-  z-index: 88888;
+    position: absolute !important;
+    height: 100% !important;
+    width: 100% !important;
+    background-color: #FFF !important;
+    z-index: 88888;
 }
+
 #loader {
-  position: absolute !important;
-  top: 45%;
-  left: 50%;
-  z-index: 99999;
+    position: absolute !important;
+    top: 45%;
+    left: 50%;
+    z-index: 99999;
 }
+
 #spinner-div {
-  position: absolute !important;
-  height: 100% !important;
-  width: 100% !important;
-  background-color: transparent !important;
-  z-index: 88888;
+    position: absolute !important;
+    height: 100% !important;
+    width: 100% !important;
+    background-color: transparent !important;
+    z-index: 88888;
 }
+
 #spinner {
-  position: absolute !important;
-  top: 45%;
-  left: 50%;
-  z-index: 99999;
+    position: absolute !important;
+    top: 45%;
+    left: 50%;
+    z-index: 99999;
 }
+
 #three-inputs {
-  padding-top: 15px !important;
+    padding-top: 0px !important;
 }
+
 .custom-inline-block {
-  display: inline-block !important;
+    display: inline-block !important;
 }
+
 .CodeMirror-scroll {
-  overflow-y: hidden !important;
+    overflow-y: hidden !important;
 }
+
 .CodeMirror-scroll:hover {
-  overflow-y: auto !important;
+    overflow-y: auto !important;
 }
+
 .CodeMirror-scroll:active {
-  overflow-y: auto !important;
+    overflow-y: auto !important;
 }
+
 .sidebar-list-fiddles {
-  max-height: 150px !important;
-  overflow-y: hidden !important;
+    max-height: 150px !important;
+    overflow-y: hidden !important;
 }
+
 .sidebar-list-fiddles:hover {
-  overflow-y: auto !important;
+    overflow-y: auto !important;
 }
+
 .sidebar-fiddle-text {
-  text-overflow: ellipsis !important;
-  max-width: 120px !important;
-  white-space: nowrap !important;
-  display: inline-block !important;
-  overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: 120px !important;
+    white-space: nowrap !important;
+    display: inline-block !important;
+    overflow: hidden !important;
 }
+
 .version-font {
-  font-size: 10px !important;
-  vertical-align: bottom !important;
-  margin: 0 !important;
+    font-size: 10px !important;
+    vertical-align: bottom !important;
+    margin: 0 !important;
 }
+
 .brand-logo span {
-  display: initial !important;
+    display: initial !important;
 }
+
 .pointer {
-  cursor: pointer;
+    cursor: pointer;
 }
+
 .custom-padding-10 {
-  padding: 10px !important;
+    padding: 10px !important;
 }
+
 .custom-overflow-allowed {
-  overflow-y: auto !important;
+    overflow-y: auto !important;
 }
+
 .custom-overflow-not-allowed {
-  overflow-y: hidden !important;
+    overflow-y: hidden !important;
 }
