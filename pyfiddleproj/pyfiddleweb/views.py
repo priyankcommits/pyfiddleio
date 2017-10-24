@@ -31,6 +31,18 @@ def error_page(reuqest):
             "m": "Route not fiddled", "i": "true"}))
 
 
+def success(reuqest):
+    return HttpResponseRedirect(_my_reverse(
+        "pyfiddleweb:home", query_kwargs={
+            "m": "Thank you for your generosity"}))
+
+
+def cancel(reuqest):
+    return HttpResponseRedirect(_my_reverse(
+        "pyfiddleweb:home", query_kwargs={
+            "m": "Please donate next time"}))
+
+
 def login(request):
     user = request.user
     if user.is_authenticated():
