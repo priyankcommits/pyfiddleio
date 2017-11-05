@@ -18,10 +18,11 @@ from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.utils.http import urlencode
+from django.contrib.auth.models import User
 
 from .forms import ScriptForm
 from .models import Script, SavedScripts, StarredScripts, ScriptFiles
-from .models import ScriptRuns
+from .models import ScriptRuns, ScriptCollaborators
 # Create your views here.
 
 
@@ -81,12 +82,18 @@ def fiddle(request, fiddle_id):
         try:
             script = Script.objects.get(id=fiddle_id, active=True)
             files = ScriptFiles.objects.filter(script_id=script.id)
+            collaborators = ScriptCollaborators.objects.filter(
+                script_id=script.id)
         except ObjectDoesNotExist:
             print(traceback.print_exc())
             return HttpResponseRedirect(_my_reverse(
                 "pyfiddleweb:home", query_kwargs={"m": "Could not find fiddle"}
                 ))
-        if script.private and script.user != request.user:
+        if script.private and (
+            script.user != request.user and
+            request.user not in [
+                collaborator.user for collaborator in collaborators]
+        ):
             return HttpResponseRedirect(
                     _my_reverse(
                         "pyfiddleweb:home",
@@ -98,6 +105,7 @@ def fiddle(request, fiddle_id):
             'form': ScriptForm(instance=script),
             'script': script,
             'files': files,
+            'collaborators': collaborators,
             })
         if "i" in request.COOKIES:
             context.update({
@@ -137,15 +145,24 @@ def run(request):
                         script.runs += 1
                         script.save()
             code_entered = request.POST.get("code")
-            csrftoken = request.COOKIES.get("csrftoken", " ")
+            commands_entered = request.POST.get("commands", "")
+            packages_entered = request.POST.get("packages", "")
+            inputs_entered = request.POST.get("inputs", "")
+            csrftoken = request.COOKIES.get("csrftoken", "")
             if code_entered == "":
                 return JsonResponse({"error": "Please fiddle in some code"})
             else:
-                ScriptRuns.objects.create(token=csrftoken, code=code_entered)
+                ScriptRuns.objects.create(
+                    token=csrftoken,
+                    code=code_entered,
+                    commands=commands_entered,
+                    packages=packages_entered,
+                    inputs=inputs_entered,
+                )
             payload["code"] = code_entered
-            payload["commands"] = request.POST.get("commands", "")
-            payload["packages"] = request.POST.get("packages", "")
-            payload["inputs"] = request.POST.get("inputs", "")
+            payload["commands"] = commands_entered
+            payload["packages"] = packages_entered
+            payload["inputs"] = inputs_entered
             payload["token"] = csrftoken
             if version:
                 function = os.getenv("EXECUTE_LAMBDA_36")
@@ -165,7 +182,7 @@ def run(request):
                 {
                     "output": response_json["body"]["message"],
                     "packages": response_json["body"]["packages"],
-                    "statusCode": response["StatusCode"]
+                    "statusCode": response["StatusCode"],
                 }
             )
         except:
@@ -190,7 +207,10 @@ def save(request):
                                 query_kwargs={"m": "Could not find fiddle"},
                                 )
                             )
-                if script.user == request.user:
+                collabs = ScriptCollaborators.objects.filter(
+                    script_id=script.id)
+                if script.user == request.user or request.user in [
+                        collab.user for collab in collabs]:
                     form = ScriptForm(instance=script, data=request.POST)
                     form.save()
                     return JsonResponse(
@@ -316,6 +336,41 @@ def file_delete(request):
                 return JsonResponse({"status": 2})
             fil.delete()
             return JsonResponse({"status": 1})
+
+
+def collaborate(request):
+    if request.method == "POST" and request.user.is_authenticated():
+        try:
+            script = Script.objects.get(id=request.POST.get("fiddle_id"))
+            users = User.objects.filter(
+                email=request.POST.get("collaborator_user"))
+            for user in users:
+                ScriptCollaborators.objects.get_or_create(
+                    script=script, user=user)
+        except:
+            return JsonResponse({"message": "Could not find the user"})
+        else:
+            return JsonResponse({"message": "Added Collaborator"})
+
+
+def collaborate_delete(request):
+    if request.method == "POST" and request.user.is_authenticated():
+        try:
+            users = User.objects.filter(
+                email=request.POST.get("collaborator_email")
+            )
+            for user in users:
+                collaborator = ScriptCollaborators.objects.filter(user=user)
+                collaborator.delete()
+        except:
+            return JsonResponse({"message": "Could not delete collaborators"})
+        else:
+            return JsonResponse(
+                {
+                    "message": "Deleted Collaborator(s)",
+                    "collaborator_email": [user.id for user in users]
+                }
+            )
 
 
 def email_send(request):

@@ -12,7 +12,7 @@ import textwrap
 from setuptools.extern import six
 from setuptools.extern.six.moves import builtins, map
 
-import pkg_resources
+import pkg_resources.py31compat
 
 if sys.platform.startswith('java'):
     import org.python.modules.posix.PosixModule as _os
@@ -26,6 +26,7 @@ _open = open
 from distutils.errors import DistutilsError
 from pkg_resources import working_set
 
+
 __all__ = [
     "AbstractSandbox", "DirectorySandbox", "SandboxViolation", "run_setup",
 ]
@@ -38,10 +39,6 @@ def _execfile(filename, globals, locals=None):
     mode = 'rb'
     with open(filename, mode) as stream:
         script = stream.read()
-    # compile() function in Python 2.6 and 3.1 requires LF line endings.
-    if sys.version_info[:2] < (2, 7) or sys.version_info[:2] >= (3, 0) and sys.version_info[:2] < (3, 2):
-        script = script.replace(b'\r\n', b'\n')
-        script = script.replace(b'\r', b'\n')
     if locals is None:
         locals = globals
     code = compile(script, filename, 'exec')
@@ -73,8 +70,7 @@ def override_temp(replacement):
     """
     Monkey-patch tempfile.tempdir with replacement, ensuring it exists
     """
-    if not os.path.isdir(replacement):
-        os.makedirs(replacement)
+    pkg_resources.py31compat.makedirs(replacement, exist_ok=True)
 
     saved = tempfile.tempdir
 

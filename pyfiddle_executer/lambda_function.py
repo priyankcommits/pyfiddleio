@@ -2,11 +2,14 @@ from __future__ import print_function
 
 from subprocess import Popen, PIPE
 import os
+import sys
 import base64
 import pip
 import traceback
 
 print('Loading function')
+
+IGNORE_PACKAGES = ["numpy", "scipy", "pandas"]
 
 
 def lambda_handler(event, context):
@@ -25,6 +28,10 @@ def execute(event):
     fil_path = "/tmp/"
     fil = open(fil_path+"main.py", "wb")
     data = event["code"]
+    fil.write("import sys")
+    fil.write("\n")
+    fil.write("sys.path.append('../var/task/')")
+    fil.write("\n")
     fil.write(data)
     fil.close()
     args_string = event["commands"]
@@ -40,11 +47,14 @@ def execute(event):
     package_error_true = True
     if packages_string != "":
         packages = packages_string.split(",")[:5]
-        pip.main(["install", '-t', fil_path, "pip"])
-        pip.main(["install", '-t', fil_path, "setuptools"])
-        pip.main(["install", '-t', fil_path, "wheel"])
+        sys.path.append(".")
         for package in packages:
-            pip.main(["install", '-t', fil_path, package])
+            can_install = True
+            for item in IGNORE_PACKAGES:
+                if item in package:
+                    can_install = False
+            if can_install:
+                pip.main(["install", '-t', fil_path, package])
     input_string = ''
     for inp in event["inputs"].split(","):
         input_string += str(inp)+"\n"

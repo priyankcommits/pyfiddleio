@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 {% load staticfiles %}
 {% load static %}
+{% load compress %}
 <html>
   <head>
     <!-- Meta, title, CSS, favicons, etc. -->
@@ -28,11 +29,13 @@
     <meta property="og:description" content="PyFiddle is a free lightweight Python IDE to run and share Python scripts with some nifty features, created with love by pythonista Priyank Pulumati" />
     <meta property="twitter:title" content="Pyfiddle" />
     <meta property="twitter:description" content="PyFiddle is a free lightweight Python IDE to run and share Python scripts with some nifty features, created with love by pythonista Priyank Pulumati"/>
+    {% compress css %}
     <link rel="stylesheet" href='{% static "js/lib/codemirror.css" %}'>
     <link rel="stylesheet" href='{% static "js/theme/solarized.css" %}'>
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.11/semantic.min.css">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+    <link rel="stylesheet" href="{% static 'css/semantic.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/font-awesome.css' %}">
     <link rel="stylesheet" href='{% static "css/style.css" %}'>
+    {% endcompress %}
     {% block css %}{% endblock %}
     <!-- Begin Googel Analytics code -->
     <script>
@@ -44,15 +47,6 @@ ga('create', 'UA-102352576-1', 'auto');
 ga('send', 'pageview');
     </script>
     <!-- End Google Analytics Code -->
-    <!-- Begin Google Adsense Code -->
-    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-    <script>
-      (adsbygoogle = window.adsbygoogle || []).push({
-        google_ad_client: "ca-pub-2362093472295960",
-        enable_page_level_ads: true
-      });
-    </script>
-    <!-- End Google Adsense Code -->
     <!-- Begin SessionStack code -->
     <script type="text/javascript">
 !function(a,b){var c=window;c.SessionStack=a,c[a]=c[a]||function(){
@@ -65,7 +59,7 @@ sessionstack('identify', {
   email: '{{request.user.email}}',
   displayName: '{{request.user.username}}',
   role: 'user',
-  pricingPlan: 'free'
+  pricingPlan: 'free',
 });
     </script>
     <!-- End SessionStack Code -->
@@ -95,15 +89,18 @@ sessionstack('identify', {
       {% include "pyfiddleweb/_mobile.html" %}
     </div>
     <!-- js files -->
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.11/semantic.min.js"></script>
-    <script src="{% static "js/lib/codemirror.js" %}"></script>
-    <script src="{% static "js/mode/python/python.js" %}"></script>
-    <script src="{% static "js/jquery.cookie.js" %}"></script>
-    <script src="{% static "js/jquery.form.min.js" %}"></script>
-    <script src="{% static "js/purl.js" %}"></script>
-    <script src="{% static "js/main.js" %}"></script>
+    {% compress js %}
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/semantic.min.js' %}"></script>
+    <script src="{% static 'js/lib/codemirror.js' %}"></script>
+    <script src="{% static 'js/mode/python/python.js' %}"></script>
+    <script src="{% static 'js/jquery.cookie.js' %}"></script>
+    <script src="{% static 'js/jquery.form.min.js' %}"></script>
+    <script src="{% static 'js/purl.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    {% endcompress %}
     <!-- page js -->
-    {% block scripting %}{% endblock %}
+    {% block scripting %}
+    {% endblock %}
   </body>
 </html>

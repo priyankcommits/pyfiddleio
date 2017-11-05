@@ -3,6 +3,7 @@ from django.conf.urls import url
 from .views import logout
 from .views import home, run, upload, fiddle, email_send, privacy
 from .views import save, star, delete, share, file_delete, success, cancel
+from .views import collaborate, collaborate_delete
 
 urlpatterns = [
     url(r'login/', home, name='login'),
@@ -18,8 +19,10 @@ urlpatterns = [
     url(r'upload/', upload, name='upload'),
     url(r'star/', star, name='star'),
     url(r'share/', share, name='share'),
+    url(r'collaborator_delete/', collaborate_delete, name='collaborate_delete'),
     url(r'file_delete/', file_delete, name='file_delete'),
     url(r'delete/', delete, name='delete'),
+    url(r'collaborate/', collaborate, name='collaborate'),
     url(r'email/', email_send, name='email'),
     url(r'privacy/', privacy, name='privacy'),
     url(r'success/', success, name="success"),

@@ -8,6 +8,7 @@ import traceback
 
 print('Loading function')
 
+IGNORE_PACKAGES = ["numpy", "scipy", "pandas"]
 
 def lambda_handler(event, context):
     print(event)
@@ -25,6 +26,10 @@ def execute(event):
     fil_path = "/tmp/"
     fil = open(fil_path+"main.py", "wb")
     data = event["code"]
+    fil.write("import sys".encode("utf-8"))
+    fil.write("\n".encode("utf-8"))
+    fil.write("sys.path.append('../var/task/')".encode("utf-8"))
+    fil.write("\n".encode("utf-8"))
     fil.write(bytes(data.encode("utf-8")))
     fil.close()
     args_string = event["commands"]
@@ -40,11 +45,14 @@ def execute(event):
     package_error_true = True
     if packages_string != "":
         packages = packages_string.split(",")[:5]
-        pip.main(["install", '-t', fil_path, "pip"])
-        pip.main(["install", '-t', fil_path, "setuptools"])
-        pip.main(["install", '-t', fil_path, "wheel"])
+        sys.path.append(".")
         for package in packages:
-            pip.main(["install", '-t', fil_path, package])
+            can_install = True
+            for item in IGNORE_PACKAGES:
+                if item in package:
+                    can_install = False
+            if can_install:
+                pip.main(["install", '-t', fil_path, package])
     input_string = ''
     for inp in event["inputs"].split(","):
         input_string += str(inp)+"\n"
@@ -91,7 +99,9 @@ def _remove_envs():
         'AWS_LAMBDA_FUNCTION_NAME',
         'AWS_LAMBDA_FUNCTION_MEMORY_SIZE',
         'AWS_LAMBDA_FUNCTION_VERSION',
-        'PATH'
+        'PATH',
+        'LAMBDA_TASK_ROOT',
+        'LD_LIBRARY_PATH'
     ]
     try:
         for key in list(os.environ.keys()):

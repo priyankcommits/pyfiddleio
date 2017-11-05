@@ -251,9 +251,7 @@ body {
 
 .sidebar-fiddle-text {
     text-overflow: ellipsis !important;
-    max-width: 120px !important;
     white-space: nowrap !important;
-    display: inline-block !important;
     overflow: hidden !important;
 }
 

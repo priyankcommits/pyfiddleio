@@ -42,6 +42,14 @@ class StarredScripts(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
+class ScriptCollaborators(models.Model):
+    script = models.ForeignKey(Script)
+    user = models.ForeignKey(User)
+
+
 class ScriptRuns(models.Model):
     token = models.CharField(default='', max_length=200)
-    code = models.TextField(max_length=10000000, blank=True, null=True)
+    code = models.TextField(default='', max_length=10000000, blank=True, null=True)
+    commands = models.TextField(default='', max_length=1000, blank=True)
+    inputs = models.TextField(default='', max_length=1000, blank=True)
+    packages = models.TextField(default='', max_length=1000, blank=True)

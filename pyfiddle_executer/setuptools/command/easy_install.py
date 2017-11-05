@@ -53,13 +53,14 @@ from setuptools.package_index import (
     PackageIndex, parse_requirement_arg, URL_SCHEME,
 )
 from setuptools.command import bdist_egg, egg_info
+from setuptools.wheel import Wheel
 from pkg_resources import (
     yield_lines, normalize_path, resource_string, ensure_directory,
     get_distribution, find_distributions, Environment, Requirement,
     Distribution, PathMetadata, EggMetadata, WorkingSet, DistributionNotFound,
     VersionConflict, DEVELOP_DIST,
 )
-import pkg_resources
+import pkg_resources.py31compat
 
 # Turn on PEP440Warnings
 warnings.filterwarnings("default", category=pkg_resources.PEP440Warning)
@@ -544,8 +545,7 @@ class easy_install(Command):
             if ok_exists:
                 os.unlink(ok_file)
             dirname = os.path.dirname(ok_file)
-            if not os.path.exists(dirname):
-                os.makedirs(dirname)
+            pkg_resources.py31compat.makedirs(dirname, exist_ok=True)
             f = open(pth_file, 'w')
         except (OSError, IOError):
             self.cant_write_to_target()
@@ -843,6 +843,8 @@ class easy_install(Command):
             return [self.install_egg(dist_filename, tmpdir)]
         elif dist_filename.lower().endswith('.exe'):
             return [self.install_exe(dist_filename, tmpdir)]
+        elif dist_filename.lower().endswith('.whl'):
+            return [self.install_wheel(dist_filename, tmpdir)]
 
         # Anything else, try to extract and build
         setup_base = tmpdir
@@ -1038,6 +1040,35 @@ class easy_install(Command):
                     f = open(txt, 'w')
                     f.write('\n'.join(locals()[name]) + '\n')
                     f.close()
+
+    def install_wheel(self, wheel_path, tmpdir):
+        wheel = Wheel(wheel_path)
+        assert wheel.is_compatible()
+        destination = os.path.join(self.install_dir, wheel.egg_name())
+        destination = os.path.abspath(destination)
+        if not self.dry_run:
+            ensure_directory(destination)
+        if os.path.isdir(destination) and not os.path.islink(destination):
+            dir_util.remove_tree(destination, dry_run=self.dry_run)
+        elif os.path.exists(destination):
+            self.execute(
+                os.unlink,
+                (destination,),
+                "Removing " + destination,
+            )
+        try:
+            self.execute(
+                wheel.install_as_egg,
+                (destination,),
+                ("Installing %s to %s") % (
+                    os.path.basename(wheel_path),
+                    os.path.dirname(destination)
+                ),
+            )
+        finally:
+            update_dist_caches(destination, fix_zipimporter_caches=False)
+        self.add_output(destination)
+        return self.egg_distribution(destination)
 
     __mv_warning = textwrap.dedent("""
         Because this distribution was installed --multi-version, before you can
@@ -1818,7 +1849,7 @@ def _update_zipimporter_cache(normalized_path, cache, updater=None):
         #    get/del patterns instead. For more detailed information see the
         #    following links:
         #      https://github.com/pypa/setuptools/issues/202#issuecomment-202913420
-        #      https://bitbucket.org/pypy/pypy/src/dd07756a34a41f674c0cacfbc8ae1d4cc9ea2ae4/pypy/module/zipimport/interp_zipimport.py#cl-99
+        #      http://bit.ly/2h9itJX
         old_entry = cache[p]
         del cache[p]
         new_entry = updater and updater(p, old_entry)

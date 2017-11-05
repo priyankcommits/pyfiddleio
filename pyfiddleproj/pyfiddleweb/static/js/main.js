@@ -67,6 +67,12 @@ function submit_ajax_form(action, data_to_send) {
             if (action == "file_delete") {
                 exec_file_delete(data, data_to_send.file_id);
             }
+            if (action == "collaborate") {
+                exec_collaborate(data);
+            }
+            if (action == "collaborator_delete") {
+                exec_collaborator_delete(data);
+            }
             spinner.hide();
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -187,6 +193,19 @@ function exec_file_delete(data, file_id) {
     }
 }
 
+function exec_collaborate(data) {
+    toaster(data.message, 4000);
+}
+
+function exec_collaborator_delete(data) {
+    if ( data.collaborator_email != undefined ){
+        $.each(data.collaborator_email, function(key, value) {
+            $(".collaborator_"+value).remove();
+        });
+    }
+    toaster(data.message, 4000);
+}
+
 function submit_email_ajax_form(form_name) {
     spinner.show();
     var options = {
@@ -195,6 +214,7 @@ function submit_email_ajax_form(form_name) {
         success: function(data, textStatus, jqXHR) {
             toaster(data.message, 4000);
             $(".ui.feedback-form.modal").modal('hide');
+            $("#email_form")[0].reset();
             spinner.hide();
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -226,6 +246,12 @@ function share_modal_open(fiddle_id) {
     $("#button_copy_url").trigger("click");
 }
 
+function collaborate_modal_open(fiddle_id) {
+    $(".ui.collaborate-content.modal").modal({
+        "inverted": true
+    }).modal('show');
+}
+
 function upload_file() {
     var action = "upload";
     var data = {};
@@ -241,7 +267,17 @@ function delete_file(file_element) {
     var file_name = file_element.attr("value");
     data.fiddle_id = fiddle_id;
     data.file_name = file_name;
-    data.file_id = file_element.attr("id");
+    data.file_id = file_element.attr("value");
+    submit_ajax_form(action, data);
+}
+
+function collaborator_delete(collaborator_element) {
+    var action = "collaborator_delete";
+    var data = {};
+    var fiddle_id = document.URL.split("/")[4];
+    var collaborator_email = collaborator_element.attr("value");
+    data.fiddle_id = fiddle_id;
+    data.collaborator_email = collaborator_email;
     submit_ajax_form(action, data);
 }
 
@@ -272,7 +308,7 @@ function toaster(message, time) {
 
 function create_help_cookie() {
     var date = new Date();
-    date.setTime(date.getTime() + (1440 * 60 * 1000));
+    date.setTime(date.getTime() + (1440 * 60 * 1000 * 10));
     $.cookie("i", "true", {
         expires: date
     });
@@ -373,6 +409,15 @@ $(document).ready(function() {
                 submit_ajax_form(action, data);
             }
         }
+        if (action == "collaborate-modal") {
+            if (fiddle_id != undefined) {
+                collaborate_modal_open(fiddle_id);
+            }
+        }
+        if (action == "collaborate") {
+            var user = $("#collaborate-user").val();
+            submit_ajax_form(action, data);
+        }
     });
     /* Upload File */
     $("#file").on('change', function(e) {
@@ -382,6 +427,10 @@ $(document).ready(function() {
     /* Delete File */
     $(document).on('click', '.file_to_delete', function() {
         delete_file($(this));
+    });
+    /* Delete Collaborator */
+    $(document).on('click', '.collaborator_delete', function() {
+        collaborator_delete($(this));
     });
     /* Toasting any url encoded messages */
     var message_url = $.url(document.URL).param().m;
@@ -442,9 +491,6 @@ $(window).load(function() {
         /* Reset */
         if (((zEvent.ctrlKey == true || zEvent.metaKey == true) && zEvent.key == "Backspace") && canReset == true) {
             zEvent.preventDefault();
-            editor.setValue("");
-            editor.clearHistory();
-            editor.clearGutter("gutterId");
             $("#shell_output").text("");
         }
     });

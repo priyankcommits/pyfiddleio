@@ -1,4 +1,5 @@
 *.pyc
+static/CACHE/
 DS_Store
 .DS_Store
 *.sqlite3

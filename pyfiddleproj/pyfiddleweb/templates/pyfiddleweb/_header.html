@@ -3,7 +3,7 @@
     <div class="item">
         <a class="brand-logo" href="{% url 'pyfiddleweb:home' %}">
             <img src="{% static 'images/python-logo.png' %}">
-            <span>Pyfiddle  <span class="version-font"> v 1.0</span></span>
+            <span>Pyfiddle  <span class="version-font"> v 1.1</span></span>
         </a>
     </div>
     <div class="item buttons-group">
@@ -20,14 +20,27 @@
             <div {% if not request.user.is_authenticated %}data-tooltip="Please login to star" {% else %}data-tooltip="Bookmark Fiddle" {% endif %} data-position="bottom right" class="custom-inline-block">
                 <button id="star" class="btn-action ui secondary basic button tiny {% if not request.user.is_authenticated %}disabled{% endif %}" value="star"><i class="star icon"></i>Bookmark</button>
             </div>
+            {% if script %}
+            {% if request.user == script.user %}
+            <div {% if not request.user.is_authenticated %}data-tooltip="Please login to add collaborator" {% else %}data-tooltip="Add Collaborator" {% endif %} data-position="bottom right" class="custom-inline-block">
+                <button id="share" class="btn-action ui secondary basic button tiny {% if not request.user.is_authenticated %}disabled{% endif %}" value="collaborate-modal"><i class="add icon"></i>Collaborator</button>
+            </div>
+            {% endif %}
+            {% endif %}
             {% if request.user.is_authenticated %} {% if request.user == script.user %}
             <div data-tooltip="Delete Fiddle" data-position="bottom right" class="custom-inline-block">
-                <button id="delete" class="btn-action ui secondary basic button tiny" value="delete"><i class="trash icon"></i>Delete</button>
+                <button id="delete" style="color:red !important;" class="btn-action ui secondary basic button tiny" value="delete"><i class="trash icon"></i>Delete</button>
             </div>
             {% endif %} {% endif %}
         </div>
     </div>
     <div class="item right">
+        <div>
+            <a href="https://www.patreon.com/pyfiddle" id="patreon" class="ui secondary button tiny" style="background-color:#F76959"><i class="payment icon"></i>Patreon</a>
+        </div>
+        <div>
+            <a href="https://liberapay.com/~17806/donate" id="donate" class="ui secondary button tiny donate" style="background-color:#F5C734"><i class="payment icon"></i>Liberapay Donate</a>
+        </div>
         <div>
             <button id="help" class="ui secondary button tiny help"><i class="help circle icon"></i>Help</button>
         </div>
@@ -57,6 +70,7 @@
         </p>
         <div class="ui top attached tabular menu">
             <a class="item active" data-tab="shortcuts">Shortcuts</a>
+            <a class="item" data-tab="new">What's New</a>
             <a class="item" data-tab="supports">Supports</a>
             <a class="item" data-tab="limitations">Limitations</a>
             <a class="item" data-tab="upcoming">Upcoming</a>
@@ -64,10 +78,18 @@
 
         <div class="ui bottom attached tab segment active" data-tab="shortcuts">
             <div class="ui bulleted list">
-                <div class="item">Clear Editor : Control/Command + Backspace</div>
                 <div class="item">Run Fiddle : Control/Command + Enter</div>
                 <div class="item">Save Fiddle : Control/Command + S</div>
+                <div class="item">Clear Console Output : Control/Command + Backspace</div>
                 <div class="item">Text Editor: Default common shortcuts (Select all, copy, paste, undo)</div>
+            </div>
+        </div>
+
+        <div class="ui bottom attached tab segment" data-tab="new">
+            <div class="ui bulleted list">
+                <div class="item">Collaboration Feature, add users to work on same fiddle</div>
+                <div class="item">Pre Compiled packages: Numpy, Scipy, Pandas</div>
+                <div class="item">Minor UI Improvements</div>
             </div>
         </div>
 

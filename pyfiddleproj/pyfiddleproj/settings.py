@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'social_django',
     'pyfiddleweb',
     'django_extensions',
+    "compressor",
 ]
 if ENVIRONMENT != "dev":
     INSTALLED_APPS += ["storages"]
@@ -147,12 +148,18 @@ USE_TZ = True
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
 )
 
 STATIC_URL = os.getenv("STATIC_URL")
 STATIC_ROOT = os.getenv("STATIC_ROOT")
 
+COMPRESS_URL = "https://zappa-rhv3u5qby.s3.amazonaws.com/"
+COMPRESS_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+
 if ENVIRONMENT != "dev":
+    AWS_ACCESS_KEY_ID = os.getenv("PYFIDDLE_S3_KEY")
+    AWS_SECRET_ACCESS_KEY = os.getenv("PYFIDDLE_S3_SECRET")
     AWS_STORAGE_BUCKET_NAME = 'zappa-rhv3u5qby'
     AWS_S3_CUSTOM_DOMAIN = 'zappa-rhv3u5qby.s3.amazonaws.com'
     STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
@@ -164,6 +171,18 @@ if ENVIRONMENT != "dev":
         'CacheControl': 'max-age=86400',
     }
 
+SOCIAL_AUTH_PIPELINE = (
+    'social.pipeline.social_auth.social_details',
+    'social.pipeline.social_auth.social_uid',
+    'social.pipeline.social_auth.auth_allowed',
+    'social.pipeline.social_auth.social_user',
+    'social.pipeline.user.create_user',
+    'social.pipeline.social_auth.associate_user',
+    'social.pipeline.social_auth.load_extra_data',
+    'social.pipeline.user.user_details',
+)
+
+
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
 SOCIAL_AUTH_LOGIN_URL = '/login/'
@@ -173,3 +192,8 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv("GOOGLE_AUTH_KEY")
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv("GOOGLE_AUTH_SECRET")
 SOCIAL_AUTH_GITHUB_KEY = os.getenv("GITHUB_AUTH_KEY")
 SOCIAL_AUTH_GITHUB_SECRET = os.getenv("GITHUB_AUTH_SECRET")
+
+
+SOCIAL_AUTH_GITHUB_SCOPE = [
+    'user:email',
+]
