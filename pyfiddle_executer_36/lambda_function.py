@@ -8,7 +8,10 @@ import traceback
 
 print('Loading function')
 
-IGNORE_PACKAGES = ["numpy", "scipy", "pandas"]
+# IGNORE_PACKAGES = ["numpy", "scipy", "pandas"]
+# TODO: Implement Pakcages for 3.6, its working for 2.7
+IGNORE_PACKAGES = []
+
 
 def lambda_handler(event, context):
     print(event)
