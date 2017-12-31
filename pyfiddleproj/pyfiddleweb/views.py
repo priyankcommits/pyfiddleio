@@ -342,11 +342,14 @@ def collaborate(request):
     if request.method == "POST" and request.user.is_authenticated():
         try:
             script = Script.objects.get(id=request.POST.get("fiddle_id"))
-            users = User.objects.filter(
-                email=request.POST.get("collaborator_user"))
-            for user in users:
-                ScriptCollaborators.objects.get_or_create(
-                    script=script, user=user)
+            if request.user == script.user:
+                users = User.objects.filter(
+                    email=request.POST.get("collaborator_user"))
+                for user in users:
+                    ScriptCollaborators.objects.get_or_create(
+                        script=script, user=user)
+            else:
+                return JsonResponse({"message": "Could not add Collaborator"})
         except:
             return JsonResponse({"message": "Could not find the user"})
         else:
