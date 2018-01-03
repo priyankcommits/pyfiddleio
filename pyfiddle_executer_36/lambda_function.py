@@ -5,6 +5,7 @@ import os
 import base64
 import pip
 import traceback
+import sys
 
 print('Loading function')
 
