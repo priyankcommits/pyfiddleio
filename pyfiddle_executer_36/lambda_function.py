@@ -5,7 +5,6 @@ import os
 import base64
 import pip
 import traceback
-import sys
 
 print('Loading function')
 
@@ -27,13 +26,9 @@ def lambda_handler(event, context):
 def execute(event):
     remove_dirs = Popen("rm -rf /tmp/*", shell=True)
     remove_dirs.communicate()
+    data = event["code"]
     fil_path = "/tmp/"
     fil = open(fil_path+"main.py", "wb")
-    data = event["code"]
-    fil.write("import sys".encode("utf-8"))
-    fil.write("\n".encode("utf-8"))
-    fil.write("sys.path.append('../var/task/')".encode("utf-8"))
-    fil.write("\n".encode("utf-8"))
     fil.write(bytes(data.encode("utf-8")))
     fil.close()
     args_string = event["commands"]
@@ -49,7 +44,6 @@ def execute(event):
     package_error_true = True
     if packages_string != "":
         packages = packages_string.split(",")[:5]
-        sys.path.append(".")
         for package in packages:
             can_install = True
             for item in IGNORE_PACKAGES:
