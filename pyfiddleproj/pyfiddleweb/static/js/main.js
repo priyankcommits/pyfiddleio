@@ -290,8 +290,8 @@ function resize() {
 
 function toaster(message, time) {
     $(".toast-message").append(
-        "<div class='ui visible message'>" +
-        "<p>" + message + "</p>" +
+        "<div class='ui visible message' style='background-color: #2885CD'>" +
+        "<p style='color: #FFFFFF'>" + message + "</p>" +
         "</div>"
     );
     var delay = (function() {

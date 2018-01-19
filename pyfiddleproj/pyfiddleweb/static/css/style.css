@@ -253,6 +253,7 @@ body {
     text-overflow: ellipsis !important;
     white-space: nowrap !important;
     overflow: hidden !important;
+    max-width: 150px !important;
 }
 
 .version-font {
