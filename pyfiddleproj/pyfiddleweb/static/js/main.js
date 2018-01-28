@@ -370,7 +370,7 @@ $(document).ready(function() {
     });
     var fiddle_id = document.URL.split("/")[4];
     if (fiddle_id == undefined || fiddle_id == "" || fiddle_id == null) {
-        editor.setValue("print('Your Code Here')");
+        editor.setValue("# Print Your code here\nprint('Hello in console window')");
     }
     if ($.cookie("script") == "true" || $.cookie("script") == true) {
         editor.setValue($.cookie("code"));

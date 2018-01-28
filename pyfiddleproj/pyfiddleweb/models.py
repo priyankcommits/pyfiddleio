@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 import uuid
+from datetime import datetime
 
 from django.db import models
 from django.contrib.auth.models import User
@@ -24,6 +25,8 @@ class Script(models.Model):
         db_index=False, default='', upload_to='', blank=True)
     runs = models.BigIntegerField(default=0, blank=True)
     active = models.BooleanField(default=True, blank=True)
+    date = models.DateTimeField(default=datetime.now, blank=True)
+    last_edit = models.CharField(default="", max_length=100, blank=True)
 
 
 class ScriptFiles(models.Model):

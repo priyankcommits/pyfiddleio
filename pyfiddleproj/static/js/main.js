@@ -290,8 +290,8 @@ function resize() {
 
 function toaster(message, time) {
     $(".toast-message").append(
-        "<div class='ui visible message'>" +
-        "<p>" + message + "</p>" +
+        "<div class='ui visible message' style='background-color: #2885CD'>" +
+        "<p style='color: #FFFFFF'>" + message + "</p>" +
         "</div>"
     );
     var delay = (function() {
@@ -370,7 +370,7 @@ $(document).ready(function() {
     });
     var fiddle_id = document.URL.split("/")[4];
     if (fiddle_id == undefined || fiddle_id == "" || fiddle_id == null) {
-        editor.setValue("print('Your Code Here')");
+        editor.setValue("# Print Your code here\nprint('Hello in console window')");
     }
     if ($.cookie("script") == "true" || $.cookie("script") == true) {
         editor.setValue($.cookie("code"));

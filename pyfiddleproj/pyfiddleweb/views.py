@@ -211,6 +211,7 @@ def save(request):
                     script_id=script.id)
                 if script.user == request.user or request.user in [
                         collab.user for collab in collabs]:
+                    script.last_edit = request.user.email
                     form = ScriptForm(instance=script, data=request.POST)
                     form.save()
                     return JsonResponse(
