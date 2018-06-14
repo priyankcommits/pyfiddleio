@@ -9,7 +9,7 @@ import traceback
 print('Loading function')
 
 # IGNORE_PACKAGES = ["numpy", "scipy", "pandas"]
-# TODO: Implement Pakcages for 3.6, its working for 2.7
+# TODO: Implement Packages for 3.6, its working for 2.7
 IGNORE_PACKAGES = []
 
 
