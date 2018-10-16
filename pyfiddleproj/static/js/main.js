@@ -5,6 +5,7 @@ var spinner = $('#spinner-div');
 var canRun = true;
 var canReset = true;
 var canSave = true;
+var canShowNotification = true;
 var editor;
 
 /* pre ajax call setup */
@@ -100,8 +101,8 @@ function exec_run(data) {
             $(".shell-result").animate({
                 scrollTop: $('.shell-result').prop("scrollHeight")
             }, 1000);
-            $("#shell_output").html($("#shell_output").html() + "<span class='bash-name'>read-only@bash: </span><span class='bash-output'></span>");
-            $('.bash-output').last().text(atob(data.output));
+            $("#shell_output").html($("#shell_output").html() + '');
+            $('.bash-output').last().text($('.bash-output').text() + "\n" + atob(data.output));
             toaster("Successfully ran Fiddle", 4000);
         }
     }
@@ -207,7 +208,7 @@ function exec_collaborator_delete(data) {
 }
 
 function submit_email_ajax_form(form_name) {
-    spinner.show();
+    $('#email_form_error_message').text(email_form_error_message);
     var options = {
         dataType: 'json',
         url: '/prod/email/',
@@ -228,7 +229,29 @@ function submit_email_ajax_form(form_name) {
         },
         timeout: 300000
     };
-    $('#' + form_name).ajaxSubmit(options);
+    var canSubmit = true;
+    var email_form_from = $('#email_form_from').val().trim();
+    var email_form_subject = $('#email_form_subject').val();
+    var email_form_message = $('#email_form_message').val().trim();
+    var email_form_error_message = '';
+    if (email_form_from == '' || email_form_from == undefined) {
+        canSubmit = false;
+        email_form_error_message = 'Email is required.';
+    }
+    else if (email_form_subject == '' || email_form_subject == undefined || email_form_subject == 'Select subject') {
+        canSubmit = false;
+        email_form_error_message = 'Subject is required.';
+    }
+    else if (email_form_message == '' || email_form_message == undefined ) {
+        canSubmit = false;
+        email_form_error_message = 'Message is required';
+    }
+    if (canSubmit) {
+        spinner.show();
+        $('#' + form_name).ajaxSubmit(options);
+    } else {
+        $('#email_form_error_message').text(email_form_error_message);
+    }
 }
 
 function share_modal_open(fiddle_id) {
@@ -288,22 +311,28 @@ function resize() {
     editor.setSize(null, height - $("#code-div").offset().top - 20);
 }
 
+function toggle_notification() {
+    canShowNotification = !canShowNotification;
+}
+
 function toaster(message, time) {
-    $(".toast-message").append(
-        "<div class='ui visible message' style='background-color: #2885CD'>" +
-        "<p style='color: #FFFFFF'>" + message + "</p>" +
-        "</div>"
-    );
-    var delay = (function() {
-        var timer = 0;
-        return function(callback, ms) {
-            clearTimeout(timer);
-            timer = setTimeout(callback, ms);
-        };
-    })();
-    delay(function() {
-        $('.message').remove();
-    }, time);
+    if (canShowNotification == true) {
+        $(".toast-message").append(
+            "<div class='ui visible message' style='background-color: #2885CD'>" +
+            "<p style='color: #FFFFFF'>" + message + "</p>" +
+            "</div>"
+        );
+        var delay = (function() {
+            var timer = 0;
+            return function(callback, ms) {
+                clearTimeout(timer);
+                timer = setTimeout(callback, ms);
+            };
+        })();
+        delay(function() {
+            $('.message').remove();
+        }, time);
+    }
 }
 
 function create_help_cookie() {
@@ -342,6 +371,9 @@ $(document).ready(function() {
     $(".help.button").click(function() {
         $('.ui.help-content.modal').modal('show');
     });
+    $(".api.button").click(function() {
+        $('.ui.api-content.modal').modal('show');
+    });
     $('.menu .item').tab();
     $('.feedback .button').click(function() {
         $('.ui.feedback-form.modal').modal('show');
@@ -377,6 +409,15 @@ $(document).ready(function() {
         $.cookie("script", "false");
     }
     resize();
+    /* Toggle Notification */
+    $("#id_notification").click(function() {
+        canShowNotification = !canShowNotification;
+    });
+    /* Clear Console Window */
+    $("#clear_bash_output").click(function() {
+        $(".bash-output").text("");
+        toaster('Cleared console', 4000);
+    });
     /* Call Editor, Shell resizer */
     $("input[value='General']").parent().find("span").each(function() {
         $(this).addClass("run");

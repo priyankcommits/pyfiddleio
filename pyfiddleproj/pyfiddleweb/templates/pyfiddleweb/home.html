@@ -8,15 +8,18 @@
         {% csrf_token %}
         <div class="sixteen wide column">
             <div class="ui form">
-                <div id="three-inputs" class="three fields">
+                <div id="three-inputs" class="four fields">
                     <div class="field">
-                        <label for="id_packages">Pip Packages (comma seperated)</label> {{ form.packages }}
+                        <label for="id_packages">Pip Packages (comma separated)</label> {{ form.packages }}
                     </div>
                     <div class="field">
-                        <label for="id_commands">Arguments (comma seperated)</label> {{form.commands }}
+                        <label for="id_commands">Arguments (comma separated)</label> {{form.commands }}
                     </div>
                     <div class="field">
-                        <label for="id_inputs">Program inputs (comma seperated, ordered)</label> {{ form.inputs }}
+                        <label for="id_inputs">Program inputs (comma separated, ordered)</label> {{ form.inputs }}
+                    </div>
+                    <div class="field">
+                        <label for="id_envs">Set Envs (comma separated, ordered)</label> {{ form.envs }}
                     </div>
                 </div>
             </div>
@@ -29,7 +32,14 @@
             </div>
             <div class="six wide column" style="padding: 0 !important;">
                 <div class="shell-result">
-                    <pre id="shell_output" class="custom-monokai"><span class="bash-name">read-only@bash:</span><span class="bash-output"> Your Output Here<br></span></pre>
+                    <button id="clear_bash_output" class="btn-action ui basic button tiny">
+                        <i class="eraser icon" style="margin-left: 5px"></i>
+                    </button>
+                    <span class="bash-name"><span>
+                        <span>read-only@bash:</span>
+                        <pre id="shell_output" class="custom-monokai">
+                            <span class="bash-output"> Your Output Here</span>
+                        </pre>
                 </div>
             </div>
         </div>

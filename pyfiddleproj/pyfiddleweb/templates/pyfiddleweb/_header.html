@@ -3,7 +3,7 @@
     <div class="item">
         <a class="brand-logo" href="{% url 'pyfiddleweb:home' %}">
             <img src="{% static 'images/python-logo.png' %}">
-            <span>Pyfiddle  <span class="version-font"> v 1.1</span></span>
+            <span>Pyfiddle  <span class="version-font"> v 1.2</span></span>
         </a>
     </div>
     <div class="item buttons-group">
@@ -36,7 +36,15 @@
     </div>
     <div class="item right">
         <div>
-            <a href="https://www.patreon.com/pyfiddle" id="patreon" class="ui secondary button tiny" style="background-color:#F76959"><i class="payment icon"></i>Patreon</a>
+            <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+                <input type="hidden" name="cmd" value="_s-xclick">
+                <input type="hidden" name="hosted_button_id" value="NZ54SCWMZLSEY">
+                <button class="ui secondary button tiny" style="background-color: #0A3582"><i class="payment icon"></i>DONATE PAYPAL</button>
+                <img alt="" border="0" src="https://www.paypalobjects.com/en_GB/i/scr/pixel.gif" width="1" height="1">
+            </form>
+        </div>
+        <div>
+            <button id="api" class="ui secondary button tiny api" style="background-color: #ECAD46"><i class="paper plane icon"></i>API</button>
         </div>
         <div>
             <button id="help" class="ui secondary button tiny help"><i class="help circle icon"></i>Help</button>
@@ -66,14 +74,14 @@
             <a target="_blank" href="https://linkedin.com/in/priyankpulumati/"><i class="linkedin icon"></i></a> and <a target="_blank" href="http://beautifulcode.in">Beautiful Code</a>
         </p>
         <div class="ui top attached tabular menu">
-            <a class="item active" data-tab="shortcuts">Shortcuts</a>
-            <a class="item" data-tab="new">What's New</a>
+            <a class="item" data-tab="shortcuts">Shortcuts</a>
+            <a class="item yellow active" data-tab="new">What's New</a>
             <a class="item" data-tab="supports">Supports</a>
             <a class="item" data-tab="limitations">Limitations</a>
             <a class="item" data-tab="upcoming">Upcoming</a>
         </div>
 
-        <div class="ui bottom attached tab segment active" data-tab="shortcuts">
+        <div class="ui bottom attached tab segment" data-tab="shortcuts">
             <div class="ui bulleted list">
                 <div class="item">Run Fiddle : Control/Command + Enter</div>
                 <div class="item">Save Fiddle : Control/Command + S</div>
@@ -82,18 +90,19 @@
             </div>
         </div>
 
-        <div class="ui bottom attached tab segment" data-tab="new">
+        <div class="ui bottom attached tab segment active" data-tab="new">
             <div class="ui bulleted list">
-                <div class="item">Collaboration Feature, add users to work on same fiddle</div>
-                <div class="item">Pre Compiled packages: Numpy, Scipy, Pandas (Python v2.7 only)</div>
                 <div class="item">Minor UI Improvements</div>
+                <div class="item">Option to switch off notifications</div>
+                <div class="item">API endpoint at <b>pyfiddle.io/api/</b></div>
+                <div class="item"><b>Please donate, this will help keep Pyfiddle.io maintain the servers</b></div>
             </div>
         </div>
 
         <div class="ui bottom attached tab segment" data-tab="supports">
             <div class="ui bulleted list">
                 <div class="item">Running, Saving and Sharing Fiddles for free</div>
-                <div class="item">Pip installation of Pakcages</div>
+                <div class="item">Pip installation of Packages</div>
                 <div class="item">Arguments to scripts</div>
                 <div class="item">Program inputs to scripts</div>
                 <div class="item">File uploads</div>
@@ -121,5 +130,23 @@
     </div>
     <div class="actions">
         <div class="ui button primary deny">Close</div>
+    </div>
+</div>
+<div class="ui api-content modal">
+        <div class="header">
+            Pyfiddle API
+        </div>
+        <div class="content">
+            <h3 class="ui header">API Usage, send a <b>POST</b> request to <b>pyfiddle.io/api/</b> with JSON data and expect a JSON reponse</h3>
+            <div class="ui bulleted list">
+                <div class="item">"code" (Required): String</div>
+                <div class="item">"version" (Optional): Empty String, if included 3.6 otherwise defaults to 2.7</div>
+                <div class="item">"commands" (Optional): Comma separated (Eg: 1,2,3)</div>
+                <div class="item">"inputs" (Optional): Comma separated (Eg: hello, world)</div>
+                <div class="item">"envs" (Optional): Comma separated (Eg: env1,val1,env2,val2)</div>
+            </div>
+        <div class="actions">
+            <div class="ui button primary deny">Close</div>
+        </div>
     </div>
 </div>

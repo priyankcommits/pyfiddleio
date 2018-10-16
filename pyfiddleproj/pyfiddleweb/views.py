@@ -19,6 +19,7 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.utils.http import urlencode
 from django.contrib.auth.models import User
+from django.views.decorators.csrf import csrf_exempt
 
 from .forms import ScriptForm
 from .models import Script, SavedScripts, StarredScripts, ScriptFiles
@@ -119,78 +120,95 @@ def fiddle(request, fiddle_id):
 
 
 def run(request):
+    print(request.POST)
     if request.method == "POST" and request.is_ajax():
-        try:
-            payload = {}
-            fiddle_id = request.POST.get("fiddle_id")
-            version = request.POST.get("version", False)
-            if fiddle_id:
-                file_paths = ScriptFiles.objects.filter(script__id=fiddle_id)
-                _get_s3_files(file_paths)
-                files = {}
-                for file_path in file_paths:
-                    fil = open(
-                        os.getenv("PYFIDDLE_WRITE_DIR")+file_path.name, "rb")
-                    data = fil.read()
-                    data_encoded = base64.b64encode(data)
-                    files[file_path.name] = data_encoded
-                payload["fiddle_id"] = fiddle_id
-                payload["files_binary"] = files
-                try:
-                    script = Script.objects.get(id=fiddle_id)
-                except Script.DoesNotExist:
-                    print(traceback.print_exc())
-                else:
-                    if script.user != request.user:
-                        script.runs += 1
-                        script.save()
-            code_entered = request.POST.get("code")
-            commands_entered = request.POST.get("commands", "")
-            packages_entered = request.POST.get("packages", "")
-            inputs_entered = request.POST.get("inputs", "")
-            csrftoken = request.COOKIES.get("csrftoken", "")
-            if code_entered == "":
-                return JsonResponse({"error": "Please fiddle in some code"})
-            else:
-                ScriptRuns.objects.create(
-                    token=csrftoken,
-                    code=code_entered,
-                    commands=commands_entered,
-                    packages=packages_entered,
-                    inputs=inputs_entered,
-                )
-            payload["code"] = code_entered
-            payload["commands"] = commands_entered
-            payload["packages"] = packages_entered
-            payload["inputs"] = inputs_entered
-            payload["token"] = csrftoken
-            if version:
-                function = os.getenv("EXECUTE_LAMBDA_36")
-            else:
-                function = os.getenv("EXECUTE_LAMBDA")
-            client = boto3.client('lambda')
-            print(function)
-            print(json.dumps(payload))
-            response = client.invoke(
-                FunctionName=function,
-                InvocationType="RequestResponse",
-                Payload=json.dumps(payload)
-            )
-            response_content = response["Payload"].read()
-            response_json = json.loads(response_content)
-            return JsonResponse(
-                {
-                    "output": response_json["body"]["message"],
-                    "packages": response_json["body"]["packages"],
-                    "statusCode": response["StatusCode"],
-                }
-            )
-        except:
-            print(traceback.print_exc())
-            return JsonResponse(
-                {"error": "Something went wrong"})
+        response = _run_fiddle(request)
+        return JsonResponse(response)
     else:
         return JsonResponse({"error": "Why are you here?"})
+
+
+@csrf_exempt
+def api(request):
+    if request.method == "POST":
+        request.POST = json.loads(request.body)
+        response = _run_fiddle(request)
+        response['output'] = base64.b64decode(response['output'])
+        return JsonResponse(response)
+    else:
+        return JsonResponse({"error": "Why are you here?"})
+
+
+def _run_fiddle(request):
+    try:
+        payload = {}
+        fiddle_id = request.POST.get("fiddle_id")
+        version = request.POST.get("version", False)
+        if fiddle_id:
+            file_paths = ScriptFiles.objects.filter(script__id=fiddle_id)
+            _get_s3_files(file_paths)
+            files = {}
+            for file_path in file_paths:
+                fil = open(
+                    os.getenv("PYFIDDLE_WRITE_DIR")+file_path.name, "rb")
+                data = fil.read()
+                data_encoded = base64.b64encode(data)
+                files[file_path.name] = data_encoded
+            payload["fiddle_id"] = fiddle_id
+            payload["files_binary"] = files
+            try:
+                script = Script.objects.get(id=fiddle_id)
+            except Script.DoesNotExist:
+                print(traceback.print_exc())
+            else:
+                if script.user != request.user:
+                    script.runs += 1
+                    script.save()
+        code_entered = request.POST.get("code")
+        commands_entered = request.POST.get("commands", "")
+        packages_entered = request.POST.get("packages", "")
+        inputs_entered = request.POST.get("inputs", "")
+        envs_entered = request.POST.get("envs", "")
+        csrftoken = request.COOKIES.get("csrftoken", "")
+        if code_entered == "":
+            return JsonResponse({"error": "Please fiddle in some code"})
+        else:
+            ScriptRuns.objects.create(
+                token=csrftoken,
+                code=code_entered,
+                commands=commands_entered,
+                packages=packages_entered,
+                inputs=inputs_entered,
+                envs=envs_entered,
+            )
+        payload["code"] = code_entered
+        payload["commands"] = commands_entered
+        payload["packages"] = packages_entered
+        payload["inputs"] = inputs_entered
+        payload["token"] = csrftoken
+        payload["envs"] = envs_entered
+        if version:
+            function = os.getenv("EXECUTE_LAMBDA_36")
+        else:
+            function = os.getenv("EXECUTE_LAMBDA")
+        client = boto3.client('lambda')
+        print(function)
+        print(json.dumps(payload))
+        response = client.invoke(
+            FunctionName=function,
+            InvocationType="RequestResponse",
+            Payload=json.dumps(payload)
+        )
+        response_content = response["Payload"].read()
+        response_json = json.loads(response_content)
+        return {
+                "output": response_json["body"]["message"],
+                "packages": response_json["body"]["packages"],
+                "statusCode": response["StatusCode"],
+            }
+    except:
+        print(traceback.print_exc())
+        return {"error": "Something went wrong"}
 
 
 def save(request):

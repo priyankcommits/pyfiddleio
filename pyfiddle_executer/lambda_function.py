@@ -9,7 +9,7 @@ import traceback
 
 print('Loading function')
 
-IGNORE_PACKAGES = ["numpy", "scipy", "pandas"]
+IGNORE_PACKAGES = []
 
 
 def lambda_handler(event, context):
@@ -25,9 +25,9 @@ def lambda_handler(event, context):
 def execute(event):
     remove_dirs = Popen("rm -rf /tmp/*", shell=True)
     remove_dirs.communicate()
+    data = event["code"]
     fil_path = "/tmp/"
     fil = open(fil_path+"main.py", "wb")
-    data = event["code"]
     fil.write("import sys")
     fil.write("\n")
     fil.write("sys.path.append('../var/task/')")
@@ -65,6 +65,7 @@ def execute(event):
                 event["files_binary"], fil_path)
             ret["files"] = file_create
     _remove_envs()
+    _write_envs(event.get('envs', ""))
     p = Popen(
             cmd,
             shell=True,
@@ -92,6 +93,17 @@ def _create_local_files_from_binary(files, fil_path):
         return False
     else:
         return True
+
+
+def _write_envs(envs_string):
+    envs = envs_string.split(',')
+    if len(envs) % 2 == 0:
+        env_keys = envs[0::2]
+        env_values = envs[1::2]
+        tuple_envs = zip(env_keys, env_values)
+        for entry in tuple_envs:
+            if not os.environ.has_key(entry[0]):
+                os.environ[entry[0]] = entry[1]
 
 
 def _remove_envs():

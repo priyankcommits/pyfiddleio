@@ -109,11 +109,12 @@ body {
 }
 
 .bash-name {
-    color: #2AA198;
+    color: #FAA198;
 }
 
 .bash-output {
     color: #000;
+    float: left;
 }
 
 .python-editor,

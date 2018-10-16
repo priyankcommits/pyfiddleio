@@ -19,6 +19,7 @@ class Script(models.Model):
     commands = models.TextField(default='', max_length=1000, blank=True)
     inputs = models.TextField(default='', max_length=1000, blank=True)
     packages = models.TextField(default='', max_length=1000, blank=True)
+    envs = models.TextField(default='', max_length=1000, blank=True)
     private = models.BooleanField(default=False, blank=True)
     version = models.BooleanField(default=False, blank=False)
     upload = models.FileField(
@@ -56,3 +57,4 @@ class ScriptRuns(models.Model):
     commands = models.TextField(default='', max_length=1000, blank=True)
     inputs = models.TextField(default='', max_length=1000, blank=True)
     packages = models.TextField(default='', max_length=1000, blank=True)
+    envs = models.TextField(default='', max_length=1000, blank=True)
