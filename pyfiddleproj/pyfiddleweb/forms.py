@@ -38,6 +38,12 @@ class ScriptForm(ModelForm):
                     "placeholder": "Eg: hello,world"
                     }
                 ),
+            'envs': forms.TextInput(
+                attrs={
+                    "form": "fiddle_form",
+                    "placeholder": "Eg: env1,value1,env2,value2"
+                    }
+                ),
             'private': forms.CheckboxInput(attrs={"form": "fiddle_form"}),
             'version': forms.CheckboxInput(attrs={"form": "fiddle_form"}),
             'fiddle_name': forms.TextInput(

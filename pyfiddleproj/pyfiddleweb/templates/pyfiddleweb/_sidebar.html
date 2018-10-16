@@ -151,6 +151,17 @@
             </div>
         </div>
     </div>
+    <div class="python-version">
+        <span>Notifications</span>
+        <div class="toggle-container">
+            <label class="v2-7" for="notification">On</label>
+            <div class="ui toggle checkbox">
+                <input type="checkbox" name="notification" id="id_notification">
+                <label for="id_notification"></label>
+            </div>
+            <label class="v3-6" for="notification">Off</label>
+        </div>
+    </div>
 
     <div class="feedback">
         <button class="ui grey basic button">
@@ -162,15 +173,15 @@
             Feedback
         </div>
         <div class="content">
-            <form id="email_form" class="ui form" action="." method="POST" enctype="multipart/form-data">
+            <form id="email_form" class="ui form" action="." method="POST" enctype="multipart/form-data" novalidate>
                 <div class="field eight wide">
                     <label>Email</label>
-                    <input type="text" name="email" placeholder="Email" required>
+                    <input type="text" id="email_form_from" name="email" placeholder="Email">
                 </div>
                 <div class="field three wide">
                     <label>Subject</label>
                     <div class="field">
-                        <select class="ui fluid search dropdown" name="subject" required>
+                        <select id="email_form_subject" class="ui fluid search dropdown" name="subject">
                             <option value="">Select subject</option>
                             <option value="General">General</option>
                             <option value="Bug/Issue">Bug/Issue</option>
@@ -180,7 +191,11 @@
                 </div>
                 <div class="field">
                     <label>Message</label>
-                    <textarea name="message"></textarea>
+                    <textarea id="email_form_message" name="message"></textarea>
+                </div>
+                <div style="color:red !important;">
+                    <div id="email_form_error_message">
+                    </div>
                 </div>
                 <button class="ui button" type="submit">Submit</button>
             </form>
