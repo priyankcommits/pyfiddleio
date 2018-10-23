@@ -1,0 +1,39 @@
+{
+"{{StageName}}": {
+  "aws_region": "{{AwsRegion}}",
+  "django_settings": "pyfiddleproj.settings",
+  "s3_bucket": "{{BucketForStaticFiles}}",
+  "environment_variables": {
+    "PYFIDDLE_EMAIL": "{{EmailForFeedback}}",
+    "PYFIDDLE_EMAIL_PASS": "{{EmailPassword}}",
+    "DJANGO_SECRET": "{{DjangoAppSecretKey}}",
+    "PYFIDDLE_ENV": "prod",
+    "PYFIDDLE_DB_USER": "pyfiddle",
+    "PYFIDDLE_DB_PASSWORD": "{{DbPassword}}",
+    "PYFIDDLE_DB_HOST": "{{DbHost}}",
+    "PYFIDDLE_DB_SCHEMA": "pyfiddleio",
+    "GOOGLE_AUTH_KEY": "{{GoogleOAuthKey}}",
+    "GOOGLE_AUTH_SECRET": "{{GoogleOAuthSecret}}",
+    "GITHUB_AUTH_KEY": "{{GithubOAuthKey}}",
+    "GITHUB_AUTH_SECRET": "{{GithubOAuthSecret}}",
+    "PYFIDDLE_S3_KEY": "{{AwsS3IAMkey}}",
+    "PYFIDDLE_S3_SECRET": "{{AwsS3IAMSecret}}",
+    "PYFIDDLE_S3_BUCKET": "{{S3BucketForUserFileUploading}}",
+    "PYFIDDLE_S3_REGION": "us-east-1",
+    "STATIC_ROOT": "static/",
+    "STATIC_DIR": "static",
+    "PYFIDDLE_WRITE_DIR": "/tmp/",
+    "EXECUTE_LAMBDA": "pyfiddleproj-executer",
+    "EXECUTE_LAMBDA_36": "pyfiddleproj-executer-36"
+  },
+  "slim_handler": false,
+  "debug": true,
+  "log_level": "DEBUG",
+  "memory_size:": 3008,
+  "runtime": "python2.7",
+  "cors": true,
+  "timeout_seconds": 300,
+  "certificate_arn": "{{DomainCertificateOptional}}",
+  "domain": "{{DomainNameOptional}}"
+  }
+}

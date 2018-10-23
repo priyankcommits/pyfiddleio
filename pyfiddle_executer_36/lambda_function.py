@@ -98,7 +98,7 @@ def _write_envs(envs_string):
         env_values = envs[1::2]
         tuple_envs = zip(env_keys, env_values)
         for entry in tuple_envs:
-            if not os.environ.has_key(entry[0]):
+            if not os.environ.get(entry[0], False):
                 os.environ[entry[0]] = entry[1]
 
 
