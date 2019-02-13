@@ -46,7 +46,7 @@
                                 </div>
                                 {% if file.script.user == request.user %}
                                 <div style="display: inline-block !important;">
-                                    <span name="file_to_delete" style="color:red !important;" class="file_to_delete pointer fa fa-minus-circle fa-1x" value="{{file.id}}">
+                                    <span name="file_to_delete" style="color:red !important;" class="file_to_delete pointer" value="{{file.id}}"><i class="close icon"></i>
                                     </span>
                                 </div>
                                 {% endif %}
@@ -73,7 +73,7 @@
                                 </div>
                                 {% if collaborator.script.user == request.user %}
                                 <div style="display: inline-block !important;">
-                                    <span name="collaborator_delete" style="color:red !important;" class="collaborator_delete pointer fa fa-minus-circle fa-1x" value="{{collaborator.user.email}}">
+                                    <span name="collaborator_delete" style="color:red !important;" class="collaborator_delete pointer" value="{{collaborator.user.email}}"><i class="close icon"></i>
                                     </span>
                                 </div>
                                 {% endif %}

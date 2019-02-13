@@ -7,6 +7,7 @@ var canReset = true;
 var canSave = true;
 var canShowNotification = true;
 var editor;
+var date = new Date();
 
 /* pre ajax call setup */
 var csrftoken = $.cookie('csrftoken');
@@ -336,7 +337,6 @@ function toaster(message, time) {
 }
 
 function create_help_cookie() {
-    var date = new Date();
     date.setTime(date.getTime() + (1440 * 60 * 1000 * 10));
     $.cookie("i", "true", {
         expires: date
@@ -350,7 +350,7 @@ function trigger_help() {
 }
 
 function check_for_mobile_view() {
-    if (height <= 500 || width <= 1000) {
+    if (height <= 400 || width <= 800) {
         $("#desktop-view").hide();
         $("#desktop-header").hide();
         $("#mobile-view").show();
@@ -401,11 +401,16 @@ $(document).ready(function() {
         }
     });
     var fiddle_id = document.URL.split("/")[4];
+    var defaultCode = "# Print Your code here\nprint('Hello in console window')";
     if (fiddle_id == undefined || fiddle_id == "" || fiddle_id == null) {
-        editor.setValue("# Print Your code here\nprint('Hello in console window')");
+        editor.setValue(defaultCode);
     }
     if ($.cookie("script") == "true" || $.cookie("script") == true) {
-        editor.setValue($.cookie("code"));
+        if ($.cookie("code") == undefined) {
+            editor.setValue(defaultCode);
+        } else {
+            editor.setValue($.cookie("code"));
+        }
         $.cookie("script", "false");
     }
     resize();
@@ -493,7 +498,6 @@ $(document).ready(function() {
     /* Login */
     $(".login-button").one("click", function(e) {
         e.preventDefault();
-        var date = new Date();
         date.setTime(date.getTime() + (1440 * 60 * 1000));
         $.cookie("script", "true", {
             expires: date

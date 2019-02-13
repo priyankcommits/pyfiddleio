@@ -102,11 +102,15 @@ def fiddle(request, fiddle_id):
                         )
                     )
         context = _common_context(request)
+        is_collaborator = False
+        if request.user in [collab.user for collab in collaborators]:
+            is_collaborator = True
         context.update({
             'form': ScriptForm(instance=script),
             'script': script,
             'files': files,
             'collaborators': collaborators,
+            'is_collaborator': is_collaborator,
             })
         if "i" in request.COOKIES:
             context.update({
@@ -264,8 +268,18 @@ def upload(request):
     fiddle_id = request.POST.get("fiddle_id")
     data = {}
     if fiddle_id:
-        script = Script.objects.get(id=fiddle_id)
-        if script.user != request.user:
+        try:
+            script = Script.objects.get(id=fiddle_id)
+            collaborators = ScriptCollaborators.objects.filter(
+                    script_id=script.id)
+        except ObjectDoesNotExist:
+            return HttpResponseRedirect(_my_reverse(
+                "pyfiddleweb:home", query_kwargs={"m": "Something went wrong"}
+            ))
+        is_collaborator = False
+        if request.user in [collab.user for collab in collaborators]:
+            is_collaborator = True
+        if script.user != request.user or not is_collaborator:
             save_data = _save_new_fiddle(request, form_check=False)
             if "fiddle_id" in save_data:
                 uploaded = _s3_upload(

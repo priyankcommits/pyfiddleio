@@ -3,7 +3,7 @@
     <div class="item">
         <a class="brand-logo" href="{% url 'pyfiddleweb:home' %}">
             <img src="{% static 'images/python-logo.png' %}">
-            <span>Pyfiddle  <span class="version-font"> v 1.2</span></span>
+            <span>Pyfiddle  <span class="version-font"> v 1.3.1</span></span>
         </a>
     </div>
     <div class="item buttons-group">
@@ -11,9 +11,15 @@
             <div data-tooltip="Run Fiddle" data-position="bottom right" class="custom-inline-block">
                 <button id="run" class="btn-action ui primary button tiny" value="run"><i class="play icon"></i>Run</button>
             </div>
+            {% if request.user == script.user or is_collaborator or not script %}
             <div {% if not request.user.is_authenticated %}data-tooltip="Please login to save" {% else %}data-tooltip="Save Fiddle" {% endif %} data-position="bottom right" class="custom-inline-block">
                 <button id="save" class="btn-action ui secondary basic button tiny {% if not request.user.is_authenticated %}disabled{% endif %}" value="save"><i class="save icon"></i>Save</button>
             </div>
+            {% else %}
+            <div {% if not request.user.is_authenticated %}data-tooltip="Please login to fork" {% else %}data-tooltip="Fork Fiddle" {% endif %} data-position="bottom right" class="custom-inline-block">
+                <button id="save" class="btn-action ui secondary basic button tiny {% if not request.user.is_authenticated %}disabled{% endif %}" value="save"><i class="fork icon"></i>Fork</button>
+            </div>
+            {% endif %}
             <div {% if not request.user.is_authenticated %}data-tooltip="Please login to share" {% else %}data-tooltip="Share Fiddle" {% endif %} data-position="bottom right" class="custom-inline-block">
                 <button id="share" class="btn-action ui secondary basic button tiny {% if not request.user.is_authenticated %}disabled{% endif %}" value="share"><i class="share icon"></i>Share</button>
             </div>
@@ -72,6 +78,9 @@
             PyFiddle is a free lightweight Python IDE to run and share Python scripts with some nifty features, created with love by pythonista Priyank Pulumati
             <a target="_blank" href="https://github.com/priyankcommits"><i class="github icon"></i></a>
             <a target="_blank" href="https://linkedin.com/in/priyankpulumati/"><i class="linkedin icon"></i></a> and <a target="_blank" href="http://beautifulcode.in">Beautiful Code</a>
+        </p>
+        <p style="color: red">
+            <b>Recent Outage:</b> A recent update (v1.3) had a JS bug, Inconvenience caused is highly regretted.
         </p>
         <div class="ui top attached tabular menu">
             <a class="item" data-tab="shortcuts">Shortcuts</a>
