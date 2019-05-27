@@ -86,7 +86,6 @@ body {
 }
 
 .shell-result {
-    height: 100% !important;
     border: #F7F7F7 !important;
     border-style: solid !important;
     overflow-y: auto !important;

@@ -309,6 +309,7 @@ function resize() {
     height = $(window).height();
     width = $(window).width();
     $("#code-div").height(height - $("#code-div").offset().top);
+    $(".shell-result").height(height - $("#code-div").offset().top);
     editor.setSize(null, height - $("#code-div").offset().top - 20);
 }
 
